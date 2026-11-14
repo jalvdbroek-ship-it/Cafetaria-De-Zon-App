@@ -37,6 +37,7 @@ export function startRouter(app, setTab) {
       if (mine !== token) return;
       cleanup?.();
       view.innerHTML = out.s;
+      view.dataset.route = path;
       cleanup = screen.mount?.(view, app, ...params) || null;
       setTab(tab);
       document.title = `${screen.title} · De Zon (demo)`;

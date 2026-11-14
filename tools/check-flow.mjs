@@ -1,0 +1,41 @@
+import { BASE, fail, ok, fresh, shot, report } from "./check-setup.mjs";
+import { auditPage } from "./check-lib.mjs";
+
+export async function flow() {
+  console.log("\n== 390x844: klikpad menu -> mandje -> afrekenen -> demo-bevestiging");
+  const { ctx, page, issues } = await fresh(390, 844);
+  await page.goto(`${BASE}#/menu`); await page.waitForSelector(".prod");
+  await page.click('[data-add="frikandel"]');
+  await page.click('[data-open="softijs"]'); await page.waitForSelector("#sheet[open]");
+  await shot(page, "390-sheet");
+  await page.click("#add-btn");
+  (await page.textContent('[data-err="houder"]')).length ? ok("verplichte keuze (hoorntje of bakje) wordt afgedwongen") : fail("sheet", "verplichte keuze niet afgedwongen");
+  await page.check('input[value="bakje"]'); await page.click("#add-btn");
+  await page.waitForFunction(() => !document.querySelector("#sheet[open]"));
+  const badge = await page.textContent(".badge");
+  badge === "2" ? ok("mandje-badge toont 2") : fail("badge", `verwacht 2, kreeg ${badge}`);
+  await page.click("#cartbar"); await page.waitForSelector(".cline");
+  await shot(page, "390-mandje");
+  await page.click("text=Verder naar afrekenen"); await page.waitForSelector("#co");
+  await page.click("#go");
+  (await page.getAttribute("#naam", "aria-invalid")) === "true" ? ok("lege naam geeft fout met aria-invalid") : fail("checkout", "geen aria-invalid op naam");
+  await page.fill("#naam", "Jan"); await page.fill("#telefoon", "123"); await page.click("#go");
+  (await page.textContent("#e-telefoon")).includes("Nederlands") ? ok("ongeldig telefoonnummer geweigerd") : fail("checkout", "telefoon niet gevalideerd");
+  await shot(page, "390-afrekenen");
+  await page.fill("#telefoon", "06 12345678"); await page.click("#go"); await page.waitForSelector(".order-id");
+  const id = await page.textContent(".order-id");
+  /^DEMO-[A-Z0-9]{4}$/.test(id) ? ok(`bevestiging ${id}`) : fail("bevestiging", `ongeldig id ${id}`);
+  (await page.textContent(".demo-banner")).toLowerCase().includes("niet ontvangen") ? ok("demo-banner op bevestiging") : fail("bevestiging", "geen demo-banner");
+  await shot(page, "390-bevestiging");
+  for (const p of await page.evaluate(auditPage)) fail("390 bevestiging", p);
+  await page.goto(`${BASE}#/sparen`); await page.waitForSelector(".flip");
+  (await page.textContent(".card-pts")).trim().startsWith("5") ? ok("spaarpunten: 2,60 + 2,50 = 5 punten") : fail("sparen", `punten: ${await page.textContent(".card-pts")}`);
+  await page.click("#flip-btn"); await page.waitForTimeout(900); await shot(page, "390-sparen-keerzijde");
+  (await page.getAttribute(".back", "aria-hidden")) === "false" ? ok("klantenkaart keert om, keerzijde bereikbaar") : fail("kaart", "keerzijde niet actief");
+  await page.goto(`${BASE}#/mandje`); await page.waitForSelector("h1");
+  (await page.textContent(".state h2")).includes("leeg") ? ok("mandje leeg na bestellen") : fail("mandje", "niet leeg");
+  await page.goto(`${BASE}#/account/bestellingen`); await page.waitForSelector("h1");
+  (await page.locator(".card .pill.demo").count()) === 1 ? ok("bestelgeschiedenis toont de demo-bestelling met Demo-label") : fail("geschiedenis", "demo-bestelling niet zichtbaar");
+  report(issues, "klikpad");
+  await ctx.close();
+}

@@ -99,7 +99,7 @@ button { cursor: pointer; }
 .demo-banner { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.875rem 1rem; border-radius: var(--r-m); background: var(--demo); color: var(--paper); font-weight: 600; }
 .demo-banner strong { display: block; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.8125rem; }
 .nodig-card { padding: 1rem; border: 2px dashed var(--line-strong); border-radius: var(--r-m); background: var(--paper-2); display: grid; gap: 0.5rem; }
-.nodig-card h3 { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.nodig-card h2, .nodig-card h3 { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
 .card { border: 2px solid var(--ink); border-radius: var(--r-m); background: var(--paper); padding: 1rem; }
 .card.sun { background: var(--sun); }
@@ -148,3 +148,4 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: var(--
 }
 html.rm *, html.rm *::before, html.rm *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 html.rm ::view-transition-group(*), html.rm ::view-transition-old(*), html.rm ::view-transition-new(*) { animation: none !important; }
+.nodig-card h2 { font-size: 1.1875rem; letter-spacing: -0.01em; }

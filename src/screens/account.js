@@ -40,7 +40,8 @@ export default {
         <label class="check"><input type="checkbox" id="rm" ${settings.reduceMotion ? "checked" : ""}><span class="grow">Beweging beperken <span class="small muted block">Zet animaties uit. Dit volgt ook de instelling van je toestel.</span></span></label>
         <button class="btn danger" id="wipe">Wis mijn gegevens op dit toestel</button>
       </section>
-      <p class="small muted">De Zon-app, demo-versie 0.1 · <a href="#/beheer">Beheer (demo)</a></p>`;
+      <p class="small muted">De Zon-app, demo-versie 0.1</p>
+      <a class="btn secondary sm" href="#/beheer">Beheer (demo)</a>`;
   },
   mount(root, app) {
     const form = $("#prof", root);

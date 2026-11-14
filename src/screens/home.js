@@ -34,7 +34,7 @@ export default {
         </div>
       </section>
       <section class="nodig-card" aria-labelledby="echt">
-        <h3 id="echt">Echt bestellen <span class="pill nodig">Koppeling nodig</span></h3>
+        <h2 id="echt">Echt bestellen <span class="pill nodig">Koppeling nodig</span></h2>
         <p>Bestellen in deze app is een demo en bereikt De Zon niet. Voor een echte bestelling bel je ${site.phoneDisplay} of loop je langs op ${site.street}.</p>
       </section>
       <section class="stack" aria-labelledby="uitgelicht">
