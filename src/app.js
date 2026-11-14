@@ -38,6 +38,10 @@ async function boot() {
     const setTab = mountShell(app);
     if (!persistent) app.toast("Opslaan op dit toestel is uit: je mandje blijft niet bewaard.", "error");
     await startRouter(app, setTab);
+    document.querySelector(".skip").addEventListener("click", (e) => { e.preventDefault(); document.getElementById("view").focus(); });
+    document.body.tabIndex = -1;
+    document.body.focus({ preventScroll: true });
+    document.body.removeAttribute("tabindex");
     if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
       navigator.serviceWorker.register("sw.js").catch(() => {});
     }

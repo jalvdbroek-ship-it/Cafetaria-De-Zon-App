@@ -38,4 +38,23 @@ Tabwissel met view transition (kort, alleen inhoud); springveer op "toevoegen" e
 Gecentreerde gradient-hero, drie gelijke icoonkaarten, verzonnen cijfers ("10.000 klanten"), sterrenscore, "ambachtelijk/vers"-claims, hover-lift, emoji, glas, schaduwen, nepbeoordelingen, een demo-bestelling die op een echte lijkt.
 
 ## Zelfbeoordeling (rubric evidence-led-ui, niet onafhankelijk)
-Wordt ingevuld in stap 14 na de metingen.
+
+Gemeten met `node tools/check-app.mjs` (Playwright, Chromium) op 390x844, 360x740 en 768x1024, `npm run contrast` en `node tools/meet-bundel.mjs`. Screenshots in `docs/screenshots/`.
+
+| Criterium | Score | Bewijs en opmerking |
+| --- | --- | --- |
+| 1 Specificiteit | 2 | Zonnewijzer met echte openingstijden (Nederlandse tijd), adres, bel en route; demo-klantenkaart met flip |
+| 2 Hiërarchie | 2 | Home: status, menukaart-CTA, bel en route; mandje: totaal en één primaire knop |
+| 3 Compositie | 2 | Eén kolom (40rem), onderbalk, sticky categoriebalk, vaste mandjebalk in Menu |
+| 4 Consistentie | 2 | Eén iconenset, één knopanatomie, één labelsysteem voor demo, voorbeeld en koppeling nodig |
+| 5 Typografie | 1 | Eén lettertype, preload; layoutverschuiving bij fontwissel niet apart gemeten |
+| 6 Materiaal | 2 | Vlak, 2px lijn, geen schaduw, glas of verloop |
+| 7 Staten | 2 | Leeg (mandje, bestellingen, acties, zoeken), fout (velden, laden), uitverkocht, niet beschikbaar, offline, gesloten, laadscherm, reduced motion |
+| 8 Responsive | 2 | Drie breedtes, geen horizontale overloop, raakvlakken 44px+ gecontroleerd per scherm |
+| 9 Toegankelijkheid | 1 | Eigen audit (namen, kopniveaus, dubbele id's, raakvlakken), toetsenbord, skip-link, sheet-focus en Escape, contrast per token-paar; geen screenreader- of apparaattest |
+| 10 Beweging | 2 | Zes bewegingen met doel, allemaal uit onder reduced motion (media query en instelling) |
+| 11 Authenticiteit | 2 | Alleen bevestigde feiten; voorbeeldmenu, -prijzen, -foto's, -spaarregels en -acties gelabeld; geen verzonnen aantallen |
+| 12 Onderscheidend | 1 | Zonnewijzer en kaart zijn herkenbaar; echte foto's van de zaak ontbreken nog |
+| **Totaal** | **21/24** | Grootste winst: eigen foto's, een screenreader-test op een echt toestel |
+
+Prestaties (lokaal, geen netwerkdemping): LCP Home ongeveer 100 ms, Menu ongeveer 110 ms. Eerste start is ongeveer 70 kB gzip (JS-kern 20, CSS 6, lettertype 40, data 3); overige schermen laden pas bij gebruik. Geen Lighthouse-run (niet geinstalleerd, niets toegevoegd).

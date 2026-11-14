@@ -3,6 +3,7 @@ import { BASE, browser, fail, ok, fresh, shot, report, state } from "./check-set
 import { auditPage } from "./check-lib.mjs";
 import { flow } from "./check-flow.mjs";
 import { more } from "./check-more.mjs";
+import { a11y } from "./check-a11y.mjs";
 
 const VIEWPORTS = [[390, 844], [360, 740], [768, 1024]];
 const ROUTES = ["home", "menu", "menu/ijs", "mandje", "sparen", "acties", "account", "account/bestellingen", "contact", "privacy", "beheer"];
@@ -23,6 +24,7 @@ for (const [w, h] of VIEWPORTS) {
 }
 await flow();
 await more();
+await a11y();
 await browser.close();
 console.log(state.fails ? `\n${state.fails} probleem/problemen` : "\nAlles groen");
 process.exit(state.fails ? 1 : 0);

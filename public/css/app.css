@@ -149,3 +149,5 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: var(--
 html.rm *, html.rm *::before, html.rm *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 html.rm ::view-transition-group(*), html.rm ::view-transition-old(*), html.rm ::view-transition-new(*) { animation: none !important; }
 .nodig-card h2 { font-size: 1.1875rem; letter-spacing: -0.01em; }
+::placeholder { color: var(--ink-2); opacity: 1; }
+body:focus { outline: none; }
