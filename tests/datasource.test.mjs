@@ -79,3 +79,11 @@ test("importAdmin weigert onzin en accepteert een geldige export", async () => {
   await ds.importAdmin(JSON.stringify(exp));
   assert.equal((await ds.getMenu()).producten[0].prijs, 999);
 });
+test("klantenkaart-nummer is stabiel, heeft DEMO-vorm en verdwijnt bij wissen", async () => {
+  const ds = make();
+  const id = await ds.getCardId();
+  assert.match(id, /^DEMO-KAART-[A-Z0-9]{6}$/);
+  assert.equal(await ds.getCardId(), id);
+  await ds.clearAll();
+  assert.notEqual(await ds.getCardId(), id);
+});

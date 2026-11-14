@@ -4,6 +4,7 @@ import { sundial, animateSun } from "../components/sundial.js";
 import { productRow, bindProducts, photo } from "../components/product.js";
 import { amsterdamParts } from "../lib/hours.mjs";
 import { progress } from "../lib/loyalty.mjs";
+import { activePromos } from "../lib/promos.mjs";
 import { reducedMotion } from "../lib/dom.js";
 
 const greeting = (h) => (h < 5 ? "Goedenacht" : h < 12 ? "Goedemorgen" : h < 18 ? "Goedemiddag" : "Goedenavond");
@@ -17,7 +18,7 @@ export default {
     const loy = await app.ds.getLoyalty();
     const name = account.naam.trim().split(/\s+/)[0];
     const featured = menu.producten.filter((p) => p.uitgelicht).slice(0, 6);
-    const promo = promos.find((p) => p.actief);
+    const promo = activePromos(promos, now)[0];
     const prog = progress(loy.balance, config.loyalty.rewards);
     return html`
       <section class="hello">

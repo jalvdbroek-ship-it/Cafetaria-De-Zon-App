@@ -5,7 +5,7 @@ import { validateCheckout, normalizePhone } from "./validate.mjs";
 import { pointsForOrder, balance, earn, redeemReward } from "./loyalty.mjs";
 
 const P = "dezon.v1.";
-const USER_KEYS = ["orders", "ledger", "vouchers", "account", "favorites", "cart"];
+const USER_KEYS = ["orders", "ledger", "vouchers", "account", "favorites", "cart", "card"];
 const ADMIN_KEYS = ["admin.menu", "admin.promos", "admin.config", "admin.site"];
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
@@ -154,6 +154,11 @@ export class LocalDemoSource {
     if ((a.naam || "").length > 60) fields.naam = "Maximaal 60 tekens.";
     if (Object.keys(fields).length) throw new ValidationError(fields);
     this.#write("account", { naam: (a.naam || "").trim(), telefoon: a.telefoon ? normalizePhone(a.telefoon) : "", email: (a.email || "").trim() });
+  }
+  async getCardId() {
+    let id = this.#read("card", null);
+    if (!id) { id = `DEMO-KAART-${randomCode(6)}`; this.#write("card", id); }
+    return id;
   }
   async getFavorites() { return this.#read("favorites", []); }
   async toggleFavorite(id) {
