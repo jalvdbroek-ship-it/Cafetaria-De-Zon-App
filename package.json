@@ -1,0 +1,15 @@
+{
+  "name": "cafetaria-de-zon-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mobiele app (PWA) voor Cafetaria De Zon, Zwartewaal. Demo-modus: er wordt niets doorgestuurd of betaald.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/",
+    "contrast": "node tools/contrast.mjs",
+    "check": "node tools/check-app.mjs",
+    "iconen": "node tools/maak-iconen.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
