@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test tests/",
+    "test": "node --test \"tests/*.test.mjs\"",
     "contrast": "node tools/contrast.mjs",
     "check": "node tools/check-app.mjs",
     "iconen": "node tools/maak-iconen.mjs"
