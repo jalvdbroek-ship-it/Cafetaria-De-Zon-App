@@ -22,7 +22,7 @@
 
 /* Foto's */
 .photo { position: relative; border: 2px solid var(--ink); border-radius: var(--r-m); overflow: hidden; background: var(--paper-2); }
-.photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.photo img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 .photo figcaption { position: absolute; left: 0.5rem; bottom: 0.5rem; padding: 0.1rem 0.6rem; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; border: 2px solid var(--ink); }
 
 /* Productregels */
@@ -56,3 +56,22 @@
 .hours tr[aria-current="date"] th, .hours tr[aria-current="date"] td { font-weight: 800; }
 address { font-style: normal; }
 .hours th { text-transform: capitalize; }
+
+/* Menu */
+.menu-bar {
+  position: sticky; top: calc(3.5rem + var(--safe-t) + var(--strip-h)); z-index: 10; display: grid; gap: 0.25rem;
+  margin: 0 calc(-1 * var(--gutter)); padding: 0.5rem var(--gutter) 0.25rem; background: var(--paper); border-bottom: 2px solid var(--line);
+}
+.stack-lg { display: grid; gap: 2rem; }
+.cat { display: grid; gap: 0.75rem; scroll-margin-top: 12.5rem; }
+.photo.banner img { aspect-ratio: 21 / 8; }
+.ill-wrap .ill { width: 6rem; height: 6rem; }
+.cartbar {
+  position: fixed; left: 50%; transform: translateX(-50%); z-index: 25; bottom: calc(var(--bar-h) + var(--safe-b) + 0.5rem);
+  width: min(calc(100% - 2 * var(--gutter)), 36rem); min-height: 3.5rem; padding: 0 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+  background: var(--ink); color: var(--paper); border: 2px solid var(--ink); border-radius: var(--r-m); text-decoration: none; font-weight: 700;
+}
+.cartbar > span:first-child { display: inline-flex; align-items: center; gap: 0.5rem; }
+.cartbar:focus-visible { outline-color: var(--ink); outline-offset: 3px; }
+
+.menu-bar input[type="search"] { min-height: 2.75rem; }
