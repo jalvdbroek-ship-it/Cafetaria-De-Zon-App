@@ -1,1 +1,58 @@
+/* Home */
+.eyebrow { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 0.25rem; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.btn.big { min-height: 3.75rem; font-size: 1.1875rem; }
+.dial { display: grid; gap: 0; border: 2px solid var(--ink); border-radius: var(--r-l); overflow: hidden; background: var(--sun); color: var(--ink); }
+.dial.is-closed { background: var(--night); color: var(--night-ink); border-color: var(--night); }
+.dial-svg { width: 100%; height: auto; padding: 1rem 1rem 0; }
+.dial-arc { fill: none; stroke: currentColor; stroke-width: 3; stroke-dasharray: 2 10; stroke-linecap: round; opacity: 0.7; }
+.dial-horizon { stroke: currentColor; stroke-width: 3; }
+.sun-disc { fill: var(--paper); stroke: var(--ink); stroke-width: 3; }
+.is-closed .sun-disc { fill: var(--amber); stroke: var(--amber); }
+.sun-rays path { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; fill: none; }
+.is-closed .sun-rays path { stroke: var(--amber); }
+.sun-rays { transform-box: fill-box; transform-origin: center; animation: spin 40s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.dial-text { padding: 0.5rem 1.25rem 1.25rem; }
+.dial-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.dial-sub { font-size: 1.125rem; font-weight: 600; }
+.meter { height: 0.875rem; border: 2px solid var(--ink); border-radius: 999px; overflow: hidden; background: var(--paper-2); }
+.meter span { display: block; height: 100%; background: var(--sun); border-right: 2px solid var(--ink); min-width: 0; transition: width 0.6s var(--ease); }
+.meter span[style*="width:0%"] { border-right: 0; }
 
+/* Foto's */
+.photo { position: relative; border: 2px solid var(--ink); border-radius: var(--r-m); overflow: hidden; background: var(--paper-2); }
+.photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.photo figcaption { position: absolute; left: 0.5rem; bottom: 0.5rem; padding: 0.1rem 0.6rem; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; border: 2px solid var(--ink); }
+
+/* Productregels */
+.plist { display: grid; gap: 0.5rem; }
+.prod { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: stretch; }
+.prod-main { display: grid; grid-template-columns: 3.25rem 1fr auto; gap: 0.75rem; align-items: center; min-height: 4.25rem; padding: 0.5rem 0.75rem; text-align: left; border: 2px solid var(--line-strong); border-radius: var(--r-m); background: var(--paper); }
+.prod-main:active { background: var(--paper-2); }
+.tile { width: 3.25rem; height: 3.25rem; background: var(--paper-2); border-radius: var(--r-s); padding: 0.2rem; }
+.prod-text { display: grid; gap: 0.1rem; justify-items: start; min-width: 0; }
+.prod-name { font-weight: 700; line-height: 1.2; }
+.prod-desc { font-size: 0.875rem; color: var(--ink-2); line-height: 1.3; }
+.prod-price { font-weight: 700; font-size: 0.9375rem; white-space: nowrap; }
+.prod-add { width: 3.25rem; border: 2px solid var(--ink); border-radius: var(--r-m); background: var(--sun); display: grid; place-items: center; padding: 0; }
+.prod-add[disabled] { background: var(--paper-2); border-color: var(--line-strong); border-style: dashed; color: var(--ink-2); cursor: not-allowed; }
+.prod-add.pop { animation: pop 0.45s var(--spring); }
+@keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
+.is-out .prod-name { color: var(--ink-2); }
+
+/* Productsheet */
+.opt-group { border: 0; padding: 0; margin: 0; display: grid; gap: 0.5rem; min-width: 0; }
+.opt-group legend { font-weight: 800; padding: 0; margin-bottom: 0.5rem; }
+.stepper { display: inline-flex; align-items: center; gap: 0.75rem; }
+.stepper output { min-width: 2rem; text-align: center; font-weight: 800; font-size: 1.25rem; }
+.icon-btn[aria-pressed="true"] { background: var(--ember); color: var(--paper); border-color: var(--ember); }
+.icon-btn[aria-pressed="true"] svg { fill: currentColor; }
+
+/* Contact */
+.hours { width: 100%; border-collapse: collapse; }
+.hours th, .hours td { padding: 0.75rem 0; border-bottom: 2px solid var(--line); text-align: left; font-weight: 600; }
+.hours td { text-align: right; }
+.hours tr[aria-current="date"] th, .hours tr[aria-current="date"] td { font-weight: 800; }
+address { font-style: normal; }
+.hours th { text-transform: capitalize; }

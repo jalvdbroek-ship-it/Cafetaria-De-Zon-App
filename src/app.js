@@ -23,12 +23,13 @@ function pickStorage() {
 
 async function boot() {
   try {
-    const [menu, promos, config, site] = await Promise.all([
-      getJson("src/data/menu.json"), getJson("config/promos.json"), getJson("config/app.json"), getJson("src/data/site.json"),
+    const [menu, promos, config, site, fotos] = await Promise.all([
+      getJson("src/data/menu.json"), getJson("config/promos.json"), getJson("config/app.json"), getJson("src/data/site.json"), getJson("src/data/fotos.json"),
     ]);
     const { storage, persistent } = pickStorage();
     const ds = new LocalDemoSource({ menu, promos, config, site, storage });
     const app = await createApp({ ds });
+    app.fotos = fotos;
     app.persistent = persistent;
     root.hidden = false;
     mountOverlays(app);

@@ -32,9 +32,10 @@ export function startRouter(app, setTab) {
     }
     if (mine !== token) return;
     const params = m.slice(1);
-    const paint = () => {
+    const paint = async () => {
+      const out = await screen.render(app, ...params);
+      if (mine !== token) return;
       cleanup?.();
-      const out = screen.render(app, ...params);
       view.innerHTML = out.s;
       cleanup = screen.mount?.(view, app, ...params) || null;
       setTab(tab);
@@ -47,7 +48,7 @@ export function startRouter(app, setTab) {
     current = path;
     first = false;
     if (animate) await document.startViewTransition(paint).updateCallbackDone.catch(() => {});
-    else paint();
+    else await paint();
   }
 
   app.rerender = (opts = {}) => show({ keepScroll: true, ...opts });
