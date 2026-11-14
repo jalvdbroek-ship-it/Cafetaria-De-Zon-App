@@ -75,3 +75,30 @@ address { font-style: normal; }
 .cartbar:focus-visible { outline-color: var(--ink); outline-offset: 3px; }
 
 .menu-bar input[type="search"] { min-height: 2.75rem; }
+
+/* Mandje en afrekenen */
+.big-num { font-size: 1.75rem; font-weight: 800; }
+.clines { display: grid; gap: 0.75rem; }
+.cline { display: grid; gap: 0.5rem; padding: 0.875rem 1rem; border: 2px solid var(--ink); border-radius: var(--r-m); }
+.cline.is-out { border-style: dashed; border-color: var(--line-strong); background: var(--paper-2); }
+.cline-top, .cline-ctl { display: flex; gap: 0.75rem; justify-content: space-between; align-items: center; }
+.cline-top { align-items: flex-start; }
+.cline-name { font-weight: 800; font-size: 1.125rem; line-height: 1.2; }
+.cline-total { font-weight: 700; white-space: nowrap; }
+.link .ic { display: inline; width: 1.1rem; height: 1.1rem; vertical-align: -0.2em; }
+.grow { flex: 1; min-width: 0; }
+.block { display: block; }
+.back { display: inline-flex; align-items: center; gap: 0.25rem; text-decoration: none; }
+.slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+.slot { position: relative; }
+.slot input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.slot span { display: grid; place-items: center; min-height: 2.75rem; border: 2px solid var(--line-strong); border-radius: var(--r-m); font-weight: 700; font-size: 0.9375rem; }
+.slot input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.slot input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: 2px; }
+.slotset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.olines { display: grid; gap: 0.5rem; }
+.olines li { display: flex; gap: 0.75rem; align-items: baseline; }
+.olines .total { border-top: 2px solid var(--ink); padding-top: 0.5rem; font-weight: 800; font-size: 1.125rem; }
+.center { text-align: center; justify-items: center; }
+.order-id { font-size: clamp(2rem, 10vw, 2.75rem); letter-spacing: 0.04em; }
+@media (max-width: 22rem) { .slots { grid-template-columns: repeat(3, 1fr); } }
