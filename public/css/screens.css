@@ -124,3 +124,13 @@ address { font-style: normal; }
   .face.back, .flip.flipped .front { opacity: 0; }
   .flip.flipped .back { opacity: 1; }
 }
+html.rm .face { transition: opacity 0.2s; backface-visibility: visible; }
+html.rm .face.front, html.rm .flip.flipped .front, html.rm .face.back, html.rm .flip.flipped .back { transform: none; }
+html.rm .face.back, html.rm .flip.flipped .front { opacity: 0; }
+html.rm .flip.flipped .back { opacity: 1; }
+
+/* Account */
+.navlist { display: grid; gap: 0.5rem; }
+.navrow { display: flex; align-items: center; gap: 0.75rem; min-height: 3.75rem; padding: 0.5rem 1rem; border: 2px solid var(--ink); border-radius: var(--r-m); text-decoration: none; }
+.navrow:active { background: var(--paper-2); }
+.prose p { max-width: 60ch; }

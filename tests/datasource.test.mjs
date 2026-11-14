@@ -87,3 +87,17 @@ test("klantenkaart-nummer is stabiel, heeft DEMO-vorm en verdwijnt bij wissen", 
   await ds.clearAll();
   assert.notEqual(await ds.getCardId(), id);
 });
+test("instellingen hebben een standaard, blijven bewaard en negeren onbekende sleutels", async () => {
+  const ds = make();
+  assert.deepEqual(await ds.getSettings(), { reduceMotion: false });
+  await ds.saveSettings({ reduceMotion: true, onzin: 1 });
+  assert.deepEqual(await ds.getSettings(), { reduceMotion: true });
+  await ds.clearAll();
+  assert.deepEqual(await ds.getSettings(), { reduceMotion: false });
+});
+test("een bestelling bewaart de gekozen opties zodat opnieuw bestellen kan", async () => {
+  const ds = make();
+  const order = await ds.placeOrder({ lines: [{ key: "frites-middel|saus:mayo", productId: "frites-middel", selection: { saus: ["mayo"] }, qty: 1 }], customer, pickup: { asap: true } });
+  assert.deepEqual(order.lines[0].selection, { saus: ["mayo"] });
+  assert.equal(order.total, 400);
+});

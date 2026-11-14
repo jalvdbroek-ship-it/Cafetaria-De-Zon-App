@@ -5,7 +5,7 @@ import { validateCheckout, normalizePhone } from "./validate.mjs";
 import { pointsForOrder, balance, earn, redeemReward } from "./loyalty.mjs";
 
 const P = "dezon.v1.";
-const USER_KEYS = ["orders", "ledger", "vouchers", "account", "favorites", "cart", "card"];
+const USER_KEYS = ["orders", "ledger", "vouchers", "account", "favorites", "cart", "card", "settings"];
 const ADMIN_KEYS = ["admin.menu", "admin.promos", "admin.config", "admin.site"];
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
@@ -118,7 +118,7 @@ export class LocalDemoSource {
     const pointsEarned = pointsForOrder(priced.subtotal, config.loyalty);
     const order = {
       id, createdAt: now.toISOString(), demo: true, sentToShop: false,
-      lines: priced.lines.map((l) => ({ productId: l.productId, naam: l.product.naam, qty: l.qty, unit: l.unit, total: l.total, optionNames: l.optionNames })),
+      lines: priced.lines.map((l) => ({ productId: l.productId, selection: l.selection, naam: l.product.naam, qty: l.qty, unit: l.unit, total: l.total, optionNames: l.optionNames })),
       total: priced.subtotal,
       customer: { naam: customer.naam.trim(), telefoon: normalizePhone(customer.telefoon), email: (customer.email || "").trim(), opmerking: (customer.opmerking || "").trim() },
       pickup: pickup.asap ? { asap: true } : { asap: false, at: pickup.at, label: pickup.label || "" },
@@ -155,6 +155,8 @@ export class LocalDemoSource {
     if (Object.keys(fields).length) throw new ValidationError(fields);
     this.#write("account", { naam: (a.naam || "").trim(), telefoon: a.telefoon ? normalizePhone(a.telefoon) : "", email: (a.email || "").trim() });
   }
+  async getSettings() { return { reduceMotion: this.#read("settings", {}).reduceMotion === true }; }
+  async saveSettings(s) { this.#write("settings", { reduceMotion: s.reduceMotion === true }); }
   async getCardId() {
     let id = this.#read("card", null);
     if (!id) { id = `DEMO-KAART-${randomCode(6)}`; this.#write("card", id); }

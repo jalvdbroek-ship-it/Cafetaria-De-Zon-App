@@ -30,6 +30,7 @@ async function boot() {
     const ds = new LocalDemoSource({ menu, promos, config, site, storage });
     const app = await createApp({ ds });
     app.fotos = fotos;
+    document.documentElement.classList.toggle("rm", (await ds.getSettings()).reduceMotion);
     app.persistent = persistent;
     root.hidden = false;
     mountOverlays(app);
