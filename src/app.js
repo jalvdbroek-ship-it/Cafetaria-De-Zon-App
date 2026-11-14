@@ -33,6 +33,7 @@ async function boot() {
     document.documentElement.classList.toggle("rm", (await ds.getSettings()).reduceMotion);
     app.persistent = persistent;
     root.hidden = false;
+    document.getElementById("boot")?.remove();
     mountOverlays(app);
     const setTab = mountShell(app);
     if (!persistent) app.toast("Opslaan op dit toestel is uit: je mandje blijft niet bewaard.", "error");

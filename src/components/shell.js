@@ -61,5 +61,6 @@ export function mountOverlays(app) {
 export const fatal = (root, msg) => {
   root.innerHTML = `<div class="fatal"><h1>De app kon niet starten</h1><p>${esc(msg)}</p><p>Bel De Zon op <a href="tel:+31181663669">0181 66 36 69</a> om af te halen.</p><button class="btn" id="retry">Opnieuw proberen</button></div>`;
   root.hidden = false;
+  document.getElementById("boot")?.remove();
   document.getElementById("retry")?.addEventListener("click", () => location.reload());
 };
