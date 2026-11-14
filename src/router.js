@@ -17,7 +17,7 @@ const ROUTES = [
 
 export function startRouter(app, setTab) {
   const view = $("#view");
-  let cleanup = null, current = null, first = true, token = 0;
+  let cleanup = null, current = null, first = true, token = 0, vt = null;
 
   async function show({ keepScroll = false, focus = null } = {}) {
     const mine = ++token;
@@ -44,10 +44,14 @@ export function startRouter(app, setTab) {
       if (focus) view.querySelector(focus)?.focus({ preventScroll: true });
       else if (!first && !keepScroll) { const h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } }
     };
-    const animate = document.startViewTransition && !reducedMotion() && !first && !keepScroll && current !== path;
+    const animate = document.startViewTransition && !vt && !reducedMotion() && !first && !keepScroll && current !== path;
     current = path;
     first = false;
-    if (animate) await document.startViewTransition(paint).updateCallbackDone.catch(() => {});
+    if (animate) {
+      vt = document.startViewTransition(paint);
+      vt.finished.catch(() => {}).finally(() => { vt = null; });
+      await vt.updateCallbackDone.catch(() => {});
+    }
     else await paint();
   }
 
