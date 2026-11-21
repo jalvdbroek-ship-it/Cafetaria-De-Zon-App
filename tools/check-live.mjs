@@ -103,6 +103,7 @@ try {
   console.log("\n== toegankelijkheid en overloop, nieuwe schermen (390px, ingelogd als beheerder)");
   for (const r of ["home", "menu", "account", "privacy", "sparen", "beheer/dashboard", "beheer/bestellingen", "beheer/producten", "beheer/categorieen", "beheer/klanten", "beheer/sparen", "beheer/jackpot", "beheer/acties", "beheer/info"]) {
     await go(page, r);
+    if (r === "beheer/info") { const w = await page.evaluate(() => document.querySelector('.hours-edit input[name="o"]').getBoundingClientRect().width); w >= 100 ? ok("#/beheer/info: tijdvelden breed genoeg") : fail("#/beheer/info", `tijdveld te smal (${Math.round(w)}px)`); }
     const probs = await page.evaluate(auditPage);
     probs.length ? probs.forEach((x) => fail(`#/${r}`, x)) : ok(`#/${r}`);
   }

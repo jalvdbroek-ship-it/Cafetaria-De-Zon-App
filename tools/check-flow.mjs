@@ -6,7 +6,9 @@ export async function flow() {
   const { ctx, page, issues } = await fresh(390, 844);
   await page.goto(`${BASE}#/menu`); await page.waitForSelector(".prod");
   (await page.locator("#cat-dranken .prod-img img").count()) === 0 && (await page.locator("#cat-dranken .prod-main svg.ill").count()) > 0 ? ok("dranken: banner met foto, drankjes met eigen plaatje") : fail("dranken", "categoriefoto staat bij elk drankje");
-  await page.click('[data-add="frikandel"]');
+  await page.click('[data-add="frikandel"]'); await page.waitForSelector(".toast.show"); await page.waitForTimeout(350);
+  const toastOverBar = await page.evaluate(() => { const t = document.querySelector(".toast").getBoundingClientRect(), c = document.querySelector("#cartbar"); if (!c || c.hidden) return false; const r = c.getBoundingClientRect(); return !(t.bottom <= r.top || t.top >= r.bottom || t.right <= r.left || t.left >= r.right); });
+  toastOverBar ? fail("toast", "meldingsbalkje bedekt de mandjesbalk") : ok("meldingsbalkje staat boven de mandjesbalk");
   await page.click('[data-open="softijs"]'); await page.waitForSelector("#sheet[open]");
   await shot(page, "390-sheet");
   await page.click("#add-btn");

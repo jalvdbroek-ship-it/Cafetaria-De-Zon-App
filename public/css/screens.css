@@ -73,6 +73,8 @@ address { font-style: normal; }
 }
 .cartbar > span:first-child { display: inline-flex; align-items: center; gap: 0.5rem; }
 .cartbar:focus-visible { outline-color: var(--ink); outline-offset: 3px; }
+/* Het meldingsbalkje komt boven de mandjesbalk, niet erover */
+body:has(.cartbar:not([hidden])) .toast { bottom: calc(var(--bar-h) + var(--safe-b) + 4.75rem); }
 
 .menu-bar input[type="search"] { min-height: 2.75rem; }
 
@@ -139,6 +141,13 @@ html.rm .flip.flipped .back { opacity: 1; }
 .hours-edit .day { font-weight: 700; text-transform: capitalize; }
 .hours-edit input[type="time"] { min-width: 0; padding-inline: 0.5rem; }
 .hours-edit .check { min-height: 2.75rem; padding: 0.25rem 0.5rem; }
+@media (max-width: 30rem) {
+  .hours-edit { grid-template-columns: 1fr 1fr; row-gap: 0.25rem; }
+  .hours-edit .day { grid-column: 1; grid-row: 1; }
+  .hours-edit .check { grid-column: 2; grid-row: 1; justify-self: end; }
+  .hours-edit input[name="o"] { grid-column: 1; grid-row: 2; }
+  .hours-edit input[name="c"] { grid-column: 2; grid-row: 2; }
+}
 input[type="time"], input[type="date"], input[type="file"] { width: 100%; min-height: 3.25rem; padding: 0.5rem 0.875rem; border: 2px solid var(--ink); border-radius: var(--r-m); background: var(--paper); font-size: 1rem; }
 input[type="time"], input[type="date"], input[type="file"] { width: 100%; min-height: 3.25rem; padding: 0.5rem 0.875rem; border: 2px solid var(--ink); border-radius: var(--r-m); background: var(--paper); font-size: 1rem; }
 .adm { border: 2px solid var(--line-strong); border-radius: var(--r-m); background: var(--paper); }

@@ -1,5 +1,5 @@
 // Offline-cache: schil en data worden vooraf opgehaald; daarna stale-while-revalidate voor same-origin GET.
-const VERSION = "dezon-app-v4";
+const VERSION = "dezon-app-v5";
 const CORE = [
   "./",
   "index.html",
@@ -36,6 +36,7 @@ const CORE = [
   "src/lib/jackpot.mjs",
   "src/lib/loyalty.mjs",
   "src/lib/money.mjs",
+  "src/lib/photocrop.mjs",
   "src/lib/promos.mjs",
   "src/lib/search.mjs",
   "src/lib/slots.mjs",

@@ -2,6 +2,7 @@ import { html, $, $$ } from "../lib/dom.js";
 import { formatEuro } from "../lib/money.mjs";
 import { validateSelection, unitPrice, MAX_QTY } from "../lib/cart.mjs";
 import { icon, illustration } from "./icons.js";
+import { photoCrop } from "../lib/photocrop.mjs";
 
 export const needsChoice = (app, p) => (p.opties || []).some((g) => app.data.idx.groups.get(g)?.verplicht);
 export const catOf = (menu, p) => menu.categorieen.find((c) => c.id === p.categorie);
@@ -18,9 +19,8 @@ export function productImage(app, p) {
   if (p.foto) return { src: p.foto, own: true, pos: "50% 50%", zoom: 1 };
   const id = cat?.foto;
   if (!id || !app.fotos?.[id] || app.fotos[id].alleenBanner) return null;
-  let h = 0;
-  for (const c of p.id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return { src: `public/img/foto/${id}-800.webp`, own: false, pos: `${20 + (h % 61)}% ${20 + ((h >> 5) % 61)}%`, zoom: 1.15 + ((h >> 9) % 5) / 10 };
+  const { pos, zoom } = photoCrop(p.id);
+  return { src: `public/img/foto/${id}-800.webp`, own: false, pos, zoom };
 }
 const thumb = (app, p, cls) => {
   const img = productImage(app, p), cat = catOf(app.data.menu, p);
