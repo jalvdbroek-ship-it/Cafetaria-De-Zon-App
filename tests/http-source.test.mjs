@@ -78,3 +78,11 @@ test("beheer en Jackpot via de bron: inloggen, aanzetten, draaien, foto uploaden
   await ds.adminLogout();
   assert.equal(await ds.isAdmin(), false);
 });
+
+test("staticDemo herkent de markering van de Pages-build", async () => {
+  const { staticDemo } = await import("../src/lib/http-source.mjs");
+  const doc = (aanwezig) => ({ querySelector: (sel) => (aanwezig && sel.includes("dezon-mode") ? {} : null) });
+  assert.equal(staticDemo(doc(true)), true);
+  assert.equal(staticDemo(doc(false)), false);
+  assert.equal(staticDemo(undefined), false);
+});

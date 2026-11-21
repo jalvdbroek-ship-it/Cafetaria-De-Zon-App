@@ -155,8 +155,14 @@ export class HttpSource extends LocalDemoSource {
   }
 }
 
+// De Pages-build zet <meta name="dezon-mode" content="demo"> in index.html: een statische host heeft geen server om te vragen.
+export function staticDemo(doc = globalThis.document) {
+  return doc?.querySelector?.('meta[name="dezon-mode"][content="demo"]') != null;
+}
+
 // Kiest de bron: de echte server als die antwoordt op /api/health, anders de demo.
 export async function probeServer(fetchImpl = globalThis.fetch, base) {
+  if (staticDemo()) return null;
   try {
     const ctl = new AbortController();
     const t = setTimeout(() => ctl.abort(), 1500);

@@ -27,6 +27,8 @@ jobs:
         run: |
           mkdir _site
           cp -r index.html manifest.webmanifest sw.js src public config _site/
+          sed -i 's#<head>#<head><meta name="dezon-mode" content="demo">#' _site/index.html
+          grep -c 'dezon-mode' _site/index.html
           ls -R _site | head -40
 
       - uses: actions/configure-pages@v5
