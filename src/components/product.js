@@ -17,7 +17,7 @@ export function productImage(app, p) {
   const cat = catOf(app.data.menu, p);
   if (p.foto) return { src: p.foto, own: true, pos: "50% 50%", zoom: 1 };
   const id = cat?.foto;
-  if (!id || !app.fotos?.[id]) return null;
+  if (!id || !app.fotos?.[id] || app.fotos[id].alleenBanner) return null;
   let h = 0;
   for (const c of p.id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   return { src: `public/img/foto/${id}-800.webp`, own: false, pos: `${20 + (h % 61)}% ${20 + ((h >> 5) % 61)}%`, zoom: 1.15 + ((h >> 9) % 5) / 10 };

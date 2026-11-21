@@ -5,6 +5,7 @@ export async function flow() {
   console.log("\n== 390x844: klikpad menu -> mandje -> afrekenen -> demo-bevestiging");
   const { ctx, page, issues } = await fresh(390, 844);
   await page.goto(`${BASE}#/menu`); await page.waitForSelector(".prod");
+  (await page.locator("#cat-dranken .prod-img img").count()) === 0 && (await page.locator("#cat-dranken .prod-main svg.ill").count()) > 0 ? ok("dranken: banner met foto, drankjes met eigen plaatje") : fail("dranken", "categoriefoto staat bij elk drankje");
   await page.click('[data-add="frikandel"]');
   await page.click('[data-open="softijs"]'); await page.waitForSelector("#sheet[open]");
   await shot(page, "390-sheet");
