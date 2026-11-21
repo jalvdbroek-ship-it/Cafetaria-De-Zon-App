@@ -1,6 +1,6 @@
 # De server echt draaien
 
-Niets hiervan is gekocht of gepubliceerd. Dit is wat er nodig is.
+De demo staat online op GitHub Pages (https://jalvdbroek-ship-it.github.io/Cafetaria-De-Zon-App/). De server is niet gehost en er is niets gekocht. Dit is wat er nodig is om hem echt te draaien.
 
 ## Starten (lokaal of op een server)
 

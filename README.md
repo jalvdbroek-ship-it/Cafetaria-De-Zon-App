@@ -6,7 +6,7 @@ Zonder build-stap en zonder runtime-dependencies: vanilla ES-modules en een klei
 De app draait in **twee standen** (de app kiest zelf):
 
 - **Echt**, met `node server.js`: bestellingen, accounts, punten en beheer staan op de server. Betalen gebeurt bij het afhalen.
-- **Demo**, zonder server (bijvoorbeeld GitHub Pages): alles lokaal op het toestel, duidelijk gelabeld. De Zon ontvangt niets.
+- **Demo**, zonder server (bijvoorbeeld GitHub Pages): alles lokaal op het toestel, duidelijk gelabeld. De Zon ontvangt niets. Online: https://jalvdbroek-ship-it.github.io/Cafetaria-De-Zon-App/ (beheer in de demo: `#/beheer`, pincode uit `config/app.json`).
 
 ## Starten
 

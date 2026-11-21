@@ -1,6 +1,6 @@
 # Publiceren (nog niets gedaan)
 
-Er is **niets gepubliceerd, geplaatst of betaald**. Dit document beschrijft de opties. Regels en bedragen van Apple,
+Alleen de demo staat online (GitHub Pages). Er is **niets in een appstore geplaatst of betaald**. Dit document beschrijft de opties. Regels en bedragen van Apple,
 Google en hosters veranderen; de genoemde punten komen uit het ontwerp en uit secundaire bronnen (november 2026) en
 moeten bij publicatie bij de bron zelf worden gecontroleerd.
 
