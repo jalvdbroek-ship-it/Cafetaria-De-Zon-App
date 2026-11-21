@@ -35,6 +35,7 @@ export async function flow() {
   await page.goto(`${BASE}#/mandje`); await page.waitForSelector("h1");
   (await page.textContent(".state h2")).includes("leeg") ? ok("mandje leeg na bestellen") : fail("mandje", "niet leeg");
   await page.goto(`${BASE}#/account/bestellingen`); await page.waitForSelector("h1");
+  await page.waitForSelector(".card .pill.demo", { timeout: 8000 }).catch(() => {});
   (await page.locator(".card .pill.demo").count()) === 1 ? ok("bestelgeschiedenis toont de demo-bestelling met Demo-label") : fail("geschiedenis", "demo-bestelling niet zichtbaar");
   report(issues, "klikpad");
   await ctx.close();
