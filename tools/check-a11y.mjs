@@ -25,8 +25,8 @@ export async function a11y() {
     dur < 0.01 ? ok("reduced motion: kaartdraai heeft geen animatie") : fail("reduced motion", `transition ${dur}s`);
     await page.click("#flip-btn");
     (await page.evaluate(() => getComputedStyle(document.querySelector(".back")).opacity)) === "1" ? ok("reduced motion: keerzijde zichtbaar via opacity") : fail("reduced motion", "keerzijde niet zichtbaar");
-    await page.goto(`${BASE}#/home`); await page.waitForSelector(".sun-rays");
-    (await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector(".sun-rays")).animationDuration))) < 0.01 ? ok("reduced motion: zonnestralen staan stil") : fail("reduced motion", "zon draait nog");
+    await page.goto(`${BASE}#/home`); await page.waitForSelector(".sun-wob");
+    (await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector(".sun-wob")).animationDuration))) < 0.01 ? ok("reduced motion: zonnestralen staan stil") : fail("reduced motion", "zon draait nog");
     await ctx.close();
   }
   {
