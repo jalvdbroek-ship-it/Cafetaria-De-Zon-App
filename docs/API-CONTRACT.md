@@ -1,52 +1,35 @@
-# API-contract voor een echte koppeling
+# API
 
-De app praat nu met `LocalDemoSource` (`src/lib/datasource.mjs`). Voor een echte koppeling schrijf je een
-`HttpSource` met **dezelfde methoden**; de schermen blijven ongewijzigd. Dit contract is een voorstel, geen bestaande
-dienst. Geld is altijd in hele centen (integer). Tijden zijn ISO 8601 (UTC) met `Europe/Amsterdam` voor weergave.
+De server (`server/`) implementeert dit contract; `src/lib/http-source.mjs` is de client. Geld is altijd in hele centen. Tijden zijn ISO 8601 (UTC).
+Alle antwoorden zijn JSON; fouten hebben de vorm `{ "error": "...", "fields": { veld: "melding" } }`. Wijzigende verzoeken (alles behalve GET) moeten
+de header `X-Dezon: 1` en `Content-Type: application/json` hebben, en een eventuele `Origin` moet de eigen host zijn.
 
-## Methoden en endpoints
+## Openbaar
 
-| DataSource-methode | Endpoint | Opmerking |
-| --- | --- | --- |
-| `getMenu()` | `GET /api/menu` | Categorieen, producten, optiegroepen. Cache-vriendelijk |
-| `getPromos()` | `GET /api/promos` | Alleen actieve acties |
-| `getConfig()`, `getSite()` | `GET /api/config` | Openingstijden, afhaalinstellingen, spaarregels |
-| `placeOrder(order)` | `POST /api/orders` | Server **herberekent** prijzen; de client mag niets bepalen. Antwoord 201 met bestelling; 409 bij uitverkocht; 422 bij ongeldige velden |
-| `listOrders()` | `GET /api/me/orders` | Alleen eigen bestellingen |
-| `getLoyalty()` | `GET /api/me/loyalty` | Saldo en regels, op de server berekend |
-| `redeem(rewardId)` | `POST /api/me/loyalty/redeem` | Server controleert saldo; geeft eenmalige bon |
-| `getAccount()`, `saveAccount()` | `GET`/`PUT /api/me` | Profiel |
-| `toggleFavorite(id)` | `PUT`/`DELETE /api/me/favorites/{productId}` | |
-| beheer | zie `BEHEER-UITBREIDING.md` | Aparte rol en route-prefix `/api/admin` |
+| Methode en pad | Doel |
+| --- | --- |
+| `GET /api/health` | `{ ok, mode: "live", adminEnabled }`; de app kiest hiermee de stand |
+| `GET /api/menu`, `/api/promos`, `/api/config` | Menu, actieve acties, tijden en regels (Jackpot met kansen in procenten, zonder gewichten) |
+| `POST /api/orders` | Bestelling plaatsen. De server herberekent alles. 201 `{ order, token }`; 409 niet beschikbaar; 422 ongeldig; 429 te vaak |
+| `GET /api/orders/{id}` | Header `X-Order-Token` (of inlog) nodig |
+| `POST /api/orders/{id}/spin` | Jackpot-draai, eenmalig per bestelling; herhaling geeft dezelfde uitslag |
 
-## Datamodel
+## Klant (cookie `dezon_sid`, httpOnly, SameSite=Lax)
 
-```
-Product      { id, categorie, naam, omschrijving, prijs (centen), opties[groupId], uitverkocht, uitgelicht, bevestigd }
-Optiegroep   { id, naam, type: "single"|"multi", verplicht, max?, opties: [{ id, naam, prijs (centen) }] }
-Bestelling   { id, status: "ontvangen"|"in bereiding"|"klaar"|"opgehaald"|"geannuleerd", createdAt,
-               regels: [{ productId, naam, qty, selection: { groupId: [optionId] }, unit, total }], total,
-               klant: { naam, telefoon, email?, opmerking? }, afhalen: { asap | at }, betaling: { methode, status } }
-Klant        { id, naam, telefoon, email, kaartnummer, aangemaakt }
-Actie        { id, titel, tekst, vanaf?, tot?, actief, knop? }
-Spaarregel   { pointsPerEuro, rewards: [{ id, naam, punten }] }
-Spaarmutatie { id, klantId, type: "earn"|"redeem", points, ref, createdAt }   // append-only grootboek
-```
+`POST /api/auth/register` (naam, telefoon, e-mail?, wachtwoord, akkoord), `POST /api/auth/login`, `POST /api/auth/logout`,
+`GET|PUT|DELETE /api/me` (verwijderen vraagt het wachtwoord), `GET /api/me/orders`, `GET /api/me/loyalty`, `POST /api/me/loyalty/redeem`,
+`GET /api/me/favorites`, `PUT|DELETE /api/me/favorites/{productId}`.
 
-## Authenticatie en veiligheid
+## Beheer (cookie `dezon_admin`, 8 uur)
 
-- Klanten: sessiecookie (`httpOnly`, `Secure`, `SameSite=Lax`) of een OIDC-inlog; **geen token in localStorage**.
-- Beheer: aparte rol met MFA; nooit een pincode in een clientbestand.
-- Bestelling plaatsen werkt ook als gast (naam en telefoon), met rate limiting en een eenvoudige bot-controle.
-- Alle invoer opnieuw valideren op de server (de client-validatie in `validate.mjs` is alleen gebruiksgemak).
-- CORS alleen voor de eigen oorsprong. Geen sleutels in code; geheimen in omgevingsvariabelen van de server.
-- Bestelstatus via polling of server-sent events; pushmeldingen alleen na expliciete toestemming.
-- Spaarpunten alleen op de server schrijven (grootboek), nooit door de client.
+`POST /api/admin/login|logout`, `GET /api/admin/session|stats|orders|customers|vouchers|jackpot`, `PUT /api/admin/orders/{id}` (status),
+`PUT /api/admin/vouchers/{code}`, `PUT /api/admin/menu|promos|site|config`, `POST /api/admin/upload` (`image/webp|jpeg|png`, max 2 MB, geeft `{ url }`).
 
-## Overstappen
+## Gegevens (in `data/`)
 
-1. Implementeer `HttpSource` met dezelfde methoden als `LocalDemoSource`.
-2. Maak in `src/app.js` de bron te kiezen (nu wordt `LocalDemoSource` direct aangemaakt).
-3. Haal de demo-aanduidingen pas weg als bestellingen echt bij De Zon aankomen: de strook `.demo-strip` in `index.html`,
-   `demoBanner` (`src/components/order.js`), de labels `pill demo` en de knoptekst "Demo-bestelling opslaan".
-   De vlag `demo` in `config/app.json` stuurt dit nu nog niet aan.
+`menu`, `promos`, `config` (pickup, loyalty, jackpot), `site` (uren), `orders`, `customers`, `ledger` (append-only punten per klant), `vouchers`, `spins`, `sessions` (alleen hashes), `uploads/`.
+
+## Veiligheid in het kort
+
+Prijzen en punten worden alleen op de server bepaald. Wachtwoorden: scrypt. Sleuteltjes en sessies: alleen hashes op schijf. Inloggen en bestellen hebben een
+beperking per IP; beheer 5 pogingen per 15 minuten. Uploads: type uit de bytes, eigen bestandsnaam, strikt pad. Statische bestanden buiten de app (`server/`, `data/`, `tests/`, `docs/`) zijn niet bereikbaar.

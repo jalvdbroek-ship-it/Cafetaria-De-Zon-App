@@ -5,7 +5,8 @@ const ROUTES = [
   [/^\/menu(?:\/([a-z0-9-]+))?$/, "menu", () => import("./screens/menu.js")],
   [/^\/mandje$/, "mandje", () => import("./screens/cart.js")],
   [/^\/mandje\/afrekenen$/, "mandje", () => import("./screens/checkout.js")],
-  [/^\/mandje\/klaar\/(DEMO-[A-Z0-9]{4})$/, "mandje", () => import("./screens/done.js")],
+  [/^\/mandje\/klaar\/((?:DEMO|ZON)-[A-Z0-9]{4,5})$/, "mandje", () => import("./screens/done.js")],
+  [/^\/jackpot\/((?:DEMO|ZON)-[A-Z0-9]{4,5})$/, "sparen", () => import("./screens/jackpot.js")],
   [/^\/sparen$/, "sparen", () => import("./screens/loyalty.js")],
   [/^\/acties$/, "sparen", () => import("./screens/promos.js")],
   [/^\/account$/, "account", () => import("./screens/account.js")],
@@ -40,7 +41,7 @@ export function startRouter(app, setTab) {
       view.dataset.route = path;
       cleanup = screen.mount?.(view, app, ...params) || null;
       setTab(tab);
-      document.title = `${screen.title} · De Zon (demo)`;
+      document.title = `${screen.title} · De Zon${app.demo ? " (demo)" : ""}`;
       if (!keepScroll) scrollTo(0, screen.keepScroll ? scrollY : 0);
       if (focus) view.querySelector(focus)?.focus({ preventScroll: true });
       else if (!first && !keepScroll) { const h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } }

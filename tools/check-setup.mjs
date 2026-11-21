@@ -25,5 +25,10 @@ export async function fresh(w, h, { sw = "block" } = {}) {
   page.on("request", (r) => { const u = r.url(); if (!u.startsWith(BASE) && !u.startsWith("data:") && !u.startsWith("blob:")) issues.push(`extern verzoek: ${u}`); });
   return { ctx, page, issues };
 }
-export const shot = async (page, name) => { if (SHOTS) await page.screenshot({ path: `${OUT}${name}.png` }); };
+export const shot = async (page, name) => {
+  if (!SHOTS) return;
+  await page.waitForTimeout(500); // laat de schermovergang en meldingen uitlopen
+  await page.evaluate(() => document.getElementById("toast")?.classList.remove("show"));
+  await page.screenshot({ path: `${OUT}${name}.png` });
+};
 export const report = (issues, label) => (issues.length ? issues.forEach((i) => fail(label, i)) : ok(`${label}: geen console-fouten of externe verzoeken`));

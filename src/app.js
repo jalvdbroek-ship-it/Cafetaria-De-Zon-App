@@ -1,4 +1,5 @@
 import { LocalDemoSource } from "./lib/datasource.mjs";
+import { HttpSource, probeServer } from "./lib/http-source.mjs";
 import { createApp } from "./state/app-state.js";
 import { mountShell, mountOverlays, fatal } from "./components/shell.js";
 import { startRouter } from "./router.js";
@@ -21,15 +22,27 @@ function pickStorage() {
   }
 }
 
+function pickSession() {
+  try { sessionStorage.setItem("dezon.v1.test", "1"); sessionStorage.removeItem("dezon.v1.test"); return sessionStorage; } catch { return undefined; }
+}
+
+// Met de echte server (bereikbaar via /api/health) praat de app daarmee; anders draait de demo op dit toestel.
+async function pickSource({ storage, session }) {
+  const health = await probeServer();
+  if (health) return new HttpSource({ storage, session });
+  const [menu, promos, config, site] = await Promise.all([getJson("src/data/menu.json"), getJson("config/promos.json"), getJson("config/app.json"), getJson("src/data/site.json")]);
+  return new LocalDemoSource({ menu, promos, config, site, storage, session });
+}
+
 async function boot() {
   try {
-    const [menu, promos, config, site, fotos] = await Promise.all([
-      getJson("src/data/menu.json"), getJson("config/promos.json"), getJson("config/app.json"), getJson("src/data/site.json"), getJson("src/data/fotos.json"),
-    ]);
     const { storage, persistent } = pickStorage();
-    const ds = new LocalDemoSource({ menu, promos, config, site, storage });
+    const [ds, fotos] = await Promise.all([pickSource({ storage, session: pickSession() }), getJson("src/data/fotos.json")]);
     const app = await createApp({ ds });
     app.fotos = fotos;
+    app.loggedIn = Boolean(await ds.me?.().catch(() => null));
+    document.documentElement.dataset.mode = ds.mode;
+    document.querySelector(".demo-strip").hidden = ds.mode === "live";
     document.documentElement.classList.toggle("rm", (await ds.getSettings()).reduceMotion);
     app.persistent = persistent;
     root.hidden = false;

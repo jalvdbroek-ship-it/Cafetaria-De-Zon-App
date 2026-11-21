@@ -1,40 +1,38 @@
-# Cafetaria De Zon: app (demo)
+# Cafetaria De Zon: app
 
-Installeerbare mobiele app (PWA) voor Cafetaria De Zon, Noordeinde 12, Zwartewaal. **Demo-modus**: er wordt niets
-doorgestuurd, geplaatst of betaald. Zonder build-stap en zonder runtime-dependencies (vanilla ES-modules).
+Installeerbare mobiele app (PWA) voor Cafetaria De Zon, Noordeinde 12, Zwartewaal. Bestellen om af te halen, sparen, Jackpot en beheer.
+Zonder build-stap en zonder runtime-dependencies: vanilla ES-modules en een kleine Node-server.
+
+De app draait in **twee standen** (de app kiest zelf):
+
+- **Echt**, met `node server.js`: bestellingen, accounts, punten en beheer staan op de server. Betalen gebeurt bij het afhalen.
+- **Demo**, zonder server (bijvoorbeeld GitHub Pages): alles lokaal op het toestel, duidelijk gelabeld. De Zon ontvangt niets.
 
 ## Starten
 
 ```
-PORT=4200 node server.js      # http://localhost:4200/
-npm test                      # logica (node:test)
-node tools/check-app.mjs      # browsercontrole (Playwright via de GG Coder-sidecar); --shots maakt screenshots in docs/screenshots
+DEZON_ADMIN_PASSWORD="een-lang-wachtwoord" PORT=4200 node server.js   # http://127.0.0.1:4200/
+DEZON_DEMO=1 PORT=4200 node server.js                                  # demo-stand (alleen statisch)
+npm test                      # unit- en servertests (node:test)
+node tools/check-app.mjs      # browsercontrole; BASE=http://localhost:4200/ (localhost, niet 127.0.0.1: de service worker eist dat)
+node tools/check-live.mjs     # browsercontrole van de echte stand (start zelf een server met testgegevens)
 npm run contrast              # kleurcontrast van de tokens
-node tools/meet-bundel.mjs    # bundelgrootte
+npm run sw-lijst              # offline-lijst bijwerken na nieuwe bestanden (een test bewaakt dit)
 ```
+
+Zonder `DEZON_ADMIN_PASSWORD` werkt de app maar staat het beheer uit. Alles over echt draaien: `docs/HOSTEN.md`.
 
 ## Mappen
 
 | Map | Inhoud |
 | --- | --- |
-| `src/lib` | Pure logica: geld, mandje, spaarpunten, afhaalslots, openingstijden, datasource |
-| `src/screens`, `src/components` | Schermen en herbruikbare onderdelen |
-| `src/state` | Kleine store (mandje, UI) |
-| `src/data` | Bevestigde sitegegevens, voorbeeldmenu, foto-info |
-| `config` | `app.json` (spaarregels, afhaaltijden, demo-vlag), `promos.json` |
-| `public` | Lettertype, voorbeeldfoto's, iconen |
-| `docs` | Onderzoek, wat werkt nu, API-contract, publiceren |
+| `server/` | Node-server: opslag (JSON in `data/`), inloggen en sessies, API, uploads |
+| `src/lib` | Pure logica: geld, mandje, spaarpunten, Jackpot, statistieken, afhaalslots, openingstijden; `datasource.mjs` (demo) en `http-source.mjs` (server) met dezelfde methoden |
+| `src/screens`, `src/components` | Schermen (incl. `admin/`) en herbruikbare onderdelen |
+| `src/data`, `config` | Bevestigde sitegegevens, voorbeeldmenu, spaar- en Jackpot-voorbeeldregels |
+| `public` | Lettertype, voorbeeldfoto's, iconen, stijlen (`design.css` is het huidige ontwerp) |
+| `data/` | Wordt door de server gemaakt; bevat alle echte gegevens. Niet in git |
+| `docs` | `WERKT-NU.md`, `HOSTEN.md`, `API-CONTRACT.md`, `BEHEER-UITBREIDING.md`, `PUBLICEREN.md`, `ONDERZOEK.md` |
 | `tests`, `tools` | Tests en controlescripts |
 
-Lees `docs/WERKT-NU.md` voor wat echt werkt, wat demo is en wat een koppeling nodig heeft.
-
-## Meer
-
-- `docs/ONDERZOEK.md` bronnen, bevestigd en voorbeeld
-- `docs/WERKT-NU.md` de drie lagen
-- `docs/API-CONTRACT.md` en `docs/BEHEER-UITBREIDING.md` de weg naar een echte koppeling
-- `docs/PUBLICEREN.md` hosting, Capacitor, App Store en Google Play (niets gepubliceerd)
-- `DESIGN.md` ontwerp en zelfbeoordeling
-
-Demo-beheer: `#/beheer`, pincode in `config/app.json` (geen echte beveiliging).
-Na het toevoegen van bestanden onder `src/`: `npm run sw-lijst` (een test bewaakt de offline-lijst).
+Lees eerst `docs/WERKT-NU.md`: wat echt werkt, wat demo is en wat er nog nodig is.

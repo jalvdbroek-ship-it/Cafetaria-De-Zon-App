@@ -1,46 +1,50 @@
-# Wat werkt nu, wat is demo, wat heeft een koppeling nodig
+# Wat werkt nu, wat is demo, wat is er nog nodig
 
-De app kent drie lagen. Elke laag heeft een eigen label in de app, zodat niemand een demo voor echt aanziet.
+De app draait in twee standen. Ze tonen dezelfde schermen; de app kiest zelf via `GET /api/health`.
 
-## 1. Werkt echt (geen label)
+| Stand | Wanneer | Wat er gebeurt |
+| --- | --- | --- |
+| **Echt (eigen server)** | `node server.js` draait en de app wordt via die server geopend | Bestellingen, accounts, punten en beheer staan op de server in `data/` |
+| **Demo** | Geen server (bijvoorbeeld GitHub Pages) of `DEZON_DEMO=1` | Alles lokaal op het toestel, met label "Demo"; De Zon ontvangt niets |
+
+## 1. Werkt echt (server draait)
 
 | Onderdeel | Toelichting |
 | --- | --- |
-| Menukaart bladeren, zoeken, categorieen | Zoeken negeert hoofdletters en accenten |
-| Productopties, aantallen, mandje, totaal | Bedragen in hele centen; bewaard op het toestel |
-| Openingstijden en "nu open" | Nederlandse tijd, ook zomer- en wintertijd en sluiting na middernacht |
-| Afhaalmomenten | Kwartieren binnen openingstijden, voorbereidingstijd instelbaar |
-| Bellen, route, mailen | Links naar je belapp, Google Maps en mailapp |
-| Favorieten en instellingen | Alleen op dit toestel |
-| Offline lezen | Na het eerste bezoek werkt de app zonder verbinding (service worker) |
-| Installeren op het beginscherm | Manifest en iconen aanwezig; zie `PUBLICEREN.md` |
+| Menukaart, zoeken, categorieën (incl. Menu's), opties, mandje | Prijzen in hele centen; mandje blijft op het toestel |
+| Bestelling plaatsen | De server rekent prijzen zelf opnieuw uit, controleert opties, uitverkocht, openingstijd en afhaalmoment. Status: ontvangen, in bereiding, klaar, opgehaald, geannuleerd |
+| Betalen | **Niet in de app.** Elke bestelling staat op "nog te betalen bij afhalen" (contant of pin) |
+| Mijn De Zon | Account maken en inloggen (telefoon of e-mail plus wachtwoord), profiel, bestellingen met status, favorieten, bonnen, account verwijderen |
+| Sparen | Een punt per bestede euro (instelbaar). Punten komen pas bij de status "opgehaald", één keer per bestelling. Inwisselen geeft een bon `BON-xxxxx` |
+| Jackpot | Per bestelling vanaf het minimumbedrag één draai; de uitslag trekt de server (crypto-trekking). Elke draai levert een bon `JKP-xxxxx` op. **Staat op de server standaard uit** (zie `HOSTEN.md`) |
+| Beheer | Overzicht (bestellingen en omzet vandaag, open bestellingen, populair, nieuwe klanten), bestellingen met status, producten (prijs, categorie, uitverkocht, foto-upload), categorieën, klanten, spaarregels, Jackpot en bonnen verzilveren, acties, openingstijden |
+| Beveiliging | Beheerwachtwoord uit `DEZON_ADMIN_PASSWORD` (nooit in code), scrypt-hashes, httpOnly-cookies, beperking op inloggen, uploadcontrole op bytes, grootte en pad |
+| Altijd | Openingstijden en "nu open" (Nederlandse tijd), afhaalmomenten, bellen en route, offline lezen (service worker), installeren op het beginscherm |
 
-## 2. Demo (label "Demo")
+## 2. Demo (zonder server)
 
 | Onderdeel | Wat er echt gebeurt |
 | --- | --- |
-| Bestelling plaatsen | De knop zegt "Demo-bestelling opslaan". Er wordt alleen een bestelling met nummer `DEMO-xxxx` op dit toestel bewaard. **De Zon ontvangt niets.** Elk bestelscherm toont een blauwe demobanner |
-| Spaarpunten | Per bestede euro een punt (voorbeeldregel). Staan alleen op dit toestel, dus niet fraudebestendig |
-| Klantenkaart | De "QR" is een decoratieve code, geen echte QR |
-| Beloningen en bonnen | Een bon `BON-xxxx` is niet geldig bij De Zon |
-| Acties | Voorbeeldteksten, beheerbaar in het demo-beheer |
-| Account | Een lokaal profiel, geen inlog |
-| Beheerpaneel (`#/beheer`) | Demo-pincode (staat in `config/app.json`, dus geen beveiliging). Wijzigingen blijven op dit toestel. Export en import als JSON |
+| Bestelling | `DEMO-xxxx`, alleen op dit toestel. **De Zon ontvangt niets** |
+| Account, punten, bonnen | Lokaal, niet fraudebestendig; bonnen zijn niet geldig |
+| Jackpot | Zelfde rad, uitslag lokaal en "niet bindend" |
+| Beheer | Demo-pincode uit `config/app.json` (geen beveiliging), wijzigingen blijven op het toestel. Export en import als JSON. Foto's uploaden kan niet |
 
-## 3. Koppeling nodig (label "Koppeling nodig", niet nagebootst)
+## 3. Nog nodig (niet gebouwd, niet nagebootst)
 
 | Onderdeel | Wat er voor nodig is |
 | --- | --- |
-| Echte bestellingen bij De Zon | Een server of bestelplatform, en een manier om bestellingen bij de kassa te laten aankomen (zie `API-CONTRACT.md`) |
-| Betalen (iDEAL, pin) | Betaalprovider, contract en webhook |
-| Accounts en inloggen | Server met e-mailverificatie of een inlogdienst |
-| Centrale spaarpunten | Database en herkenning aan de kassa |
-| Beheer met echte opslag en beveiliging | Zie `BEHEER-UITBREIDING.md` |
-| Pushmeldingen | Pushdienst en toestemming |
-| App Store en Google Play | Zie `PUBLICEREN.md` |
+| Echt draaien | Een host met Node 20+ en HTTPS (`HOSTEN.md`). GitHub Pages kan de server niet draaien |
+| Betalen (iDEAL, pin) | Betaalprovider, contract, webhook. De `payments`-plek is voorbereid in de bestelling (`betaling.methode/status`) |
+| Melding in de keuken | Nu alleen de beheerpagina (ververst elke 15 seconden). Geluid, printer of e-mail zijn niet gebouwd |
+| E-mail en wachtwoord vergeten | Mailverzending (SMTP of een dienst); er is geen e-mailverificatie |
+| Beheer met MFA en meerdere rollen | Nu één beheerwachtwoord |
+| Back-ups en herstel | Kopieer de map `data/` (zie `HOSTEN.md`) |
+| Juridisch | Privacyverklaring laten controleren (AVG), Jackpot toetsen aan de kansspelregels, algemene voorwaarden |
+| Pushmeldingen, App Store, Google Play | Zie `PUBLICEREN.md` |
 
 ## Wat is voorbeeld, niet van De Zon
 
-Alle producten, omschrijvingen, prijzen, optiegroepen, de spaarregels, de beloningen, de acties en de 11 foto's.
-Bevestigd zijn alleen: adres, telefoon, e-mail, betaalwijzen (contant en pin), openingstijden en de categorieen.
-Een product wordt "bevestigd" via het beheer of via `bevestigd: true` in `src/data/menu.json`.
+Producten, omschrijvingen, prijzen, optiegroepen, de Menu's, spaarregels, beloningen, Jackpot-prijzen en -kansen, acties en alle foto's.
+Bevestigd zijn alleen: adres, telefoon, e-mail, betaalwijzen (contant en pin), openingstijden en de categorieën.
+Een product telt als "bevestigd" zodra de eigenaar dat in het beheer aanzet; dan verdwijnt het voorbeeldlabel.

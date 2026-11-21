@@ -6,17 +6,17 @@ export default {
     const { site, config } = app.data;
     const p = config.pickup;
     return html`
-      <section class="card soft stack"><h3>Bevestigde gegevens</h3>
+      <section class="card soft stack"><h2 class="h3">Bevestigde gegevens</h2>
         <p>${site.street}, ${site.postal} ${site.city}<br>${site.phoneDisplay} · ${site.email}<br>Betalen: ${site.payment.join(", ")}</p>
         <p class="small muted">Deze gegevens zijn bevestigd en staan in src/data/site.json.</p></section>
       <form id="info" class="stack" novalidate>
-        <h3>Openingstijden</h3>
+        <h2 class="h3">Openingstijden</h2>
         ${weekRows(site.hours).map((r) => html`
           <div class="hours-edit" data-dow="${r.dow}"><span class="day">${r.dag}</span>
             <input aria-label="Open ${r.dag}" type="time" name="o" value="${r.open || "12:30"}" ${r.open ? "" : "disabled"}>
             <input aria-label="Sluit ${r.dag}" type="time" name="c" value="${r.close || "22:00"}" ${r.open ? "" : "disabled"}>
             <label class="check"><input type="checkbox" name="dicht" ${r.open ? "" : "checked"}><span>Dicht</span></label></div>`)}
-        <h3>Afhalen</h3>
+        <h2 class="h3">Afhalen</h2>
         <div class="two">
           <div class="field"><label for="iv">Slot (min)</label><input id="iv" name="iv" type="number" min="5" max="60" step="5" value="${p.intervalMin}"></div>
           <div class="field"><label for="ld">Voorbereiding (min)</label><input id="ld" name="ld" type="number" min="0" max="120" step="5" value="${p.leadMin}"></div>

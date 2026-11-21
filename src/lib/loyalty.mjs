@@ -15,12 +15,15 @@ export function progress(points, rewards) {
   };
 }
 
-export function earn(entries, points, now, ref) {
+export function earn(entries, points, now, ref, label = "Demo-bestelling") {
   if (points <= 0) return entries;
-  return [...entries, { id: `e-${entries.length + 1}-${now.getTime()}`, type: "earn", points, date: now.toISOString(), ref, label: "Demo-bestelling" }];
+  return [...entries, { id: `e-${entries.length + 1}-${now.getTime()}`, type: "earn", points, date: now.toISOString(), ref, label }];
 }
 
 export function redeemReward(entries, reward, now, code) {
   if (balance(entries) < reward.punten) throw new Error("Onvoldoende punten voor deze beloning.");
   return [...entries, { id: `r-${entries.length + 1}-${now.getTime()}`, type: "redeem", points: reward.punten, date: now.toISOString(), ref: code, label: reward.naam }];
 }
+
+// Is de beloning inwisselbaar met dit saldo? (server en client gebruiken dezelfde regel)
+export const canRedeem = (entries, reward) => Boolean(reward) && balance(entries) >= reward.punten;

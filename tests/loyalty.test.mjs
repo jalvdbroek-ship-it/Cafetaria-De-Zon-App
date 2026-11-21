@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { pointsForOrder, balance, progress, redeemReward, earn } from "../src/lib/loyalty.mjs";
+import { pointsForOrder, balance, progress, redeemReward, earn, canRedeem } from "../src/lib/loyalty.mjs";
 
 const rule = { pointsPerEuro: 1 };
 const rewards = [
@@ -42,4 +42,12 @@ test("earn voegt een regel toe met de bestelreferentie", () => {
   assert.equal(after[0].points, 12);
   assert.equal(after[0].ref, "DEMO-1234");
   assert.deepEqual(earn([], 0, new Date(), "x"), []);
+});
+
+test("earn neemt een eigen label over en canRedeem controleert het saldo", () => {
+  const e = earn([], 60, new Date("2026-11-18T10:00:00Z"), "ZON-1", "Bestelling");
+  assert.equal(e[0].label, "Bestelling");
+  assert.equal(canRedeem(e, rewards[0]), true);
+  assert.equal(canRedeem(e, rewards[1]), false);
+  assert.equal(canRedeem(e, undefined), false);
 });

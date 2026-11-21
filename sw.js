@@ -1,5 +1,5 @@
 // Offline-cache: schil en data worden vooraf opgehaald; daarna stale-while-revalidate voor same-origin GET.
-const VERSION = "dezon-app-v2";
+const VERSION = "dezon-app-v3";
 const CORE = [
   "./",
   "index.html",
@@ -10,6 +10,7 @@ const CORE = [
   "config/app.json",
   "config/promos.json",
   "public/css/app.css",
+  "public/css/design.css",
   "public/css/screens.css",
   "public/css/tokens.css",
   "src/app.js",
@@ -23,6 +24,7 @@ const CORE = [
   "src/components/product.js",
   "src/components/shell.js",
   "src/components/sundial.js",
+  "src/components/wheel.js",
   "src/data/fotos.json",
   "src/data/menu.json",
   "src/data/site.json",
@@ -30,17 +32,24 @@ const CORE = [
   "src/lib/datasource.mjs",
   "src/lib/dom.js",
   "src/lib/hours.mjs",
+  "src/lib/http-source.mjs",
+  "src/lib/jackpot.mjs",
   "src/lib/loyalty.mjs",
   "src/lib/money.mjs",
   "src/lib/promos.mjs",
   "src/lib/search.mjs",
   "src/lib/slots.mjs",
+  "src/lib/stats.mjs",
   "src/lib/validate.mjs",
   "src/router.js",
   "src/screens/account.js",
   "src/screens/admin.js",
+  "src/screens/admin/categories.js",
+  "src/screens/admin/customers.js",
+  "src/screens/admin/dashboard.js",
   "src/screens/admin/data.js",
   "src/screens/admin/info.js",
+  "src/screens/admin/jackpot.js",
   "src/screens/admin/loyalty.js",
   "src/screens/admin/orders.js",
   "src/screens/admin/products.js",
@@ -50,6 +59,7 @@ const CORE = [
   "src/screens/contact.js",
   "src/screens/done.js",
   "src/screens/home.js",
+  "src/screens/jackpot.js",
   "src/screens/loyalty.js",
   "src/screens/menu.js",
   "src/screens/orders.js",
@@ -75,7 +85,9 @@ self.addEventListener("activate", (e) => {
 });
 self.addEventListener("fetch", (e) => {
   const req = e.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
+  const u = new URL(req.url);
+  // De API en eigen uploads nooit uit de cache: bestellingen, sessies en prijzen moeten vers zijn.
+  if (req.method !== "GET" || u.origin !== location.origin || u.pathname.includes("/api/")) return;
   e.respondWith((async () => {
     const cache = await caches.open(VERSION);
     const hit = await cache.match(req, { ignoreSearch: true });

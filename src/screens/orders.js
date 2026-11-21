@@ -11,16 +11,16 @@ export default {
       <a class="link back" href="#/account">${icon("back")} Account</a>
       <h1>Mijn bestellingen</h1>
       ${orders.length ? html`
-        <p class="small muted">Alleen demo-bestellingen op dit toestel. De Zon heeft ze niet ontvangen.</p>
+        <p class="small muted">${app.demo ? "Alleen demo-bestellingen op dit toestel. De Zon heeft ze niet ontvangen." : "Je laatste bestellingen. Zonder account staan alleen bestellingen van dit toestel hier."}</p>
         <ul class="stack">${orders.map((o) => html`
           <li class="card stack">
-            <div class="spread"><strong class="num">${o.id}</strong><span class="pill demo">Demo</span></div>
+            <div class="spread"><a class="num" href="#/mandje/klaar/${o.id}"><strong>${o.id}</strong></a>${app.demo ? html`<span class="pill demo">Demo</span>` : html`<span class="pill status-${(o.status || "").replace(" ", "-")}">${o.status}</span>`}</div>
             <p class="small muted">${formatDate(o.createdAt)} · afhalen: ${formatPickup(o)}</p>
             <p>${o.lines.map((l) => `${l.qty}× ${l.naam}`).join(", ")}</p>
             <div class="spread"><strong class="num">${formatEuro(o.total)}</strong>
               <button class="btn secondary sm" data-again="${o.id}">Opnieuw bestellen</button></div>
           </li>`)}</ul>`
-      : html`<div class="state"><span class="ill-wrap">${illustration("snack")}</span><h2>Nog geen bestellingen</h2><p class="muted">Je demo-bestellingen verschijnen hier.</p><a class="btn" href="#/menu">Naar het menu</a></div>`}`;
+      : html`<div class="state"><span class="ill-wrap">${illustration("snack")}</span><h2>Nog geen bestellingen</h2><p class="muted">Je bestellingen verschijnen hier.</p><a class="btn" href="#/menu">Naar het menu</a></div>`}`;
   },
   mount(root, app) {
     const onClick = async (e) => {

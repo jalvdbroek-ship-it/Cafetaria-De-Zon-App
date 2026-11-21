@@ -1,0 +1,134 @@
+/* Ontwerp v2: geel, donkerblauw en wit, met oranje als accent. Komt na screens.css en wint van de oudere regels. */
+body { background: var(--paper); }
+.card, .cline, .reward { border-color: var(--line); box-shadow: var(--shadow); }
+.card.sun, .card.soft { box-shadow: none; }
+.card.sun { border-color: transparent; }
+.card.soft { background: var(--paper-2); border-color: var(--line); }
+.navrow { border-color: var(--line); background: var(--paper); box-shadow: var(--shadow); }
+.btn { border: 0; box-shadow: 0 2px 0 oklch(0.27 0.075 262 / 0.9); }
+.btn:active { box-shadow: none; transform: translateY(2px); }
+.btn.secondary { background: var(--paper); border: 2px solid var(--ink); box-shadow: none; }
+.btn.dark { background: var(--ink); color: var(--paper); }
+.btn.danger { border: 2px solid var(--ember); box-shadow: none; }
+.btn[disabled], .btn[aria-disabled="true"] { box-shadow: none; border: 2px dashed var(--line-strong); }
+.btn.ghost { background: transparent; color: var(--night-ink); border: 2px solid var(--night-ink); box-shadow: none; }
+.topbar { background: var(--sun); box-shadow: 0 1px 0 oklch(0.27 0.075 262 / 0.12); }
+.tabbar { border-top: 1px solid var(--line); box-shadow: 0 -4px 16px oklch(0.27 0.075 262 / 0.06); }
+.tabbar a[aria-current="page"] { background: var(--sun); border-color: transparent; }
+.tabbar a[aria-current="page"] .tab-ic::after { content: ""; position: absolute; left: 50%; bottom: -0.35rem; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--ember-bright); transform: translateX(-50%); }
+.chip { border-color: var(--line-strong); }
+.chip[aria-pressed="true"], .chip[aria-current="true"] { background: var(--ink); color: var(--paper); }
+.photo { border: 0; border-radius: var(--r-m); }
+.meter { border-color: var(--ink); background: var(--paper-2); }
+.meter span { background: linear-gradient(90deg, var(--sun), var(--ember-bright)); }
+
+/* Home */
+.hero { position: relative; display: grid; align-items: end; min-height: 26rem; margin: -1.5rem calc(-1 * var(--gutter)) 0; background: var(--night); color: var(--night-ink); overflow: hidden; border-radius: 0 0 var(--r-l) var(--r-l); }
+.hero .hero-photo { position: absolute; inset: 0; margin: 0; border-radius: 0; }
+.hero .hero-photo img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+.hero .hero-photo figcaption { left: auto; right: 0.75rem; top: 0.75rem; bottom: auto; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(0.2 0.07 262 / 0.95) 12%, oklch(0.2 0.07 262 / 0.55) 55%, oklch(0.2 0.07 262 / 0.1)); pointer-events: none; }
+.hero-body { position: relative; z-index: 1; display: grid; gap: 0.75rem; padding: 7rem var(--gutter) 1.5rem; }
+.hero h1 { color: var(--night-ink); font-size: clamp(2.2rem, 10vw, 3.25rem); }
+.hero-sub { color: var(--night-ink-2); max-width: 30ch; font-size: 1.0625rem; }
+.eyebrow.on-photo { color: var(--sun); }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+.hero-cta .btn { flex: 1 1 9rem; }
+.deal { display: grid; gap: 0.5rem; padding: 1.25rem; border-radius: var(--r-l); background: var(--sun); color: var(--ink); border-left: 0.5rem solid var(--ember-bright); justify-items: start; }
+.deal h2 { font-size: 1.75rem; }
+.deal-tag { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: 11.5rem; gap: 0.75rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; margin: 0 calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.75rem; }
+.rail::-webkit-scrollbar { display: none; }
+.pcard { position: relative; scroll-snap-align: start; border-radius: var(--r-m); background: var(--paper); box-shadow: var(--shadow); overflow: hidden; }
+.pcard-main { display: grid; width: 100%; padding: 0; border: 0; background: none; text-align: left; gap: 0.25rem; padding-bottom: 0.75rem; }
+.pcard-main:active { background: var(--paper-2); }
+.pcard-img { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2); margin-bottom: 0.25rem; }
+.pcard-img img, .prod-img img, .sheet-img img { width: 100%; height: 100%; object-fit: cover; transform: scale(var(--zoom, 1)); }
+.pcard .ill.tile { width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 0; }
+.pcard-name { padding: 0 0.75rem; font-weight: 800; line-height: 1.2; padding-right: 3.5rem; }
+.pcard-price { padding: 0 0.75rem; font-size: 0.9375rem; color: var(--ink-2); font-weight: 700; }
+.pcard.is-out { opacity: 0.7; }
+.prod-add.round { position: absolute; right: 0.5rem; bottom: 0.5rem; width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 0; box-shadow: 0 2px 0 var(--ink); }
+.jackpot-block { display: flex; gap: 1rem; align-items: center; padding: 1.25rem; border-radius: var(--r-l); background: var(--night); color: var(--night-ink); }
+.jackpot-block h2 { color: var(--sun); }
+.jackpot-block .btn { justify-self: start; }
+.jp-ic { display: inline-grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--sun); color: var(--ink); }
+.jp-ic .ic { width: 1.4rem; height: 1.4rem; fill: currentColor; }
+.jp-ic.big { width: 4rem; height: 4rem; background: var(--ember-bright); }
+.jp-ic.big .ic { width: 2.25rem; height: 2.25rem; }
+.jackpot-cta { display: flex; gap: 0.75rem; align-items: center; padding: 1rem; border-radius: var(--r-m); background: var(--sun); text-decoration: none; box-shadow: var(--shadow); }
+.jackpot-cta.won { background: var(--paper-2); border: 2px solid var(--sun); }
+.hours tr[aria-current="date"] th, .hours tr[aria-current="date"] td { color: var(--ember); }
+
+/* Productlijst met foto */
+.plist { gap: 0.75rem; }
+.prod-main { grid-template-columns: 5rem 1fr auto; border-color: var(--line); background: var(--paper); box-shadow: var(--shadow); min-height: 5.75rem; padding: 0.5rem; }
+.prod-img { display: block; width: 5rem; height: 5rem; border-radius: var(--r-s); overflow: hidden; background: var(--paper-2); }
+.prod-name { font-size: 1.0625rem; }
+.prod-add { border: 0; box-shadow: 0 2px 0 var(--ink); width: 3rem; }
+.prod-add:active { box-shadow: none; transform: translateY(2px); }
+.prod-add[disabled] { box-shadow: none; border: 2px dashed var(--line-strong); }
+.prod { align-items: center; }
+.prod-add:not(.round) { height: 3rem; border-radius: 50%; }
+.sheet-img { display: block; margin: -1.25rem calc(-1 * var(--gutter)) 0; aspect-ratio: 16 / 7; overflow: hidden; background: var(--paper-2); }
+
+/* Menu */
+.menu-bar { border-bottom: 1px solid var(--line); background: var(--paper); }
+.cat .banner { margin: 0; }
+.photo.banner img { aspect-ratio: 21 / 7; }
+.cat h2 { font-size: 1.75rem; }
+.cartbar { border: 0; box-shadow: 0 6px 20px oklch(0.27 0.075 262 / 0.35); border-radius: 999px; }
+
+/* Jackpot-scherm */
+.wheel-wrap { position: relative; width: min(100%, 21rem); margin: 0.5rem auto 0; padding-top: 1.75rem; }
+.wheel-pointer { position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 2; }
+.wheel { width: 100%; height: auto; border-radius: 50%; box-shadow: var(--shadow); will-change: transform; }
+.prize { animation: pop 0.5s var(--spring); }
+.prize h2 { font-size: 1.875rem; }
+.odds { display: grid; gap: 0.25rem; }
+.odds li { display: flex; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
+.bullets { padding-left: 1.25rem; list-style: disc; display: grid; gap: 0.375rem; }
+
+/* Beheer: dashboard, bestellingen, klanten */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+.stat { display: grid; gap: 0.25rem; padding: 1rem; border-radius: var(--r-m); background: var(--paper-2); }
+.stat strong { font-size: 1.875rem; line-height: 1; font-weight: 800; }
+.stat span { font-size: 0.875rem; color: var(--ink-2); font-weight: 600; }
+.stat.accent { background: var(--sun); }
+.stat.accent span { color: var(--ink); }
+.pill.status-ontvangen { background: var(--paper-2); color: var(--ink); border-color: var(--line-strong); }
+.pill.status-in-bereiding { background: var(--sun); color: var(--ink); border-color: var(--ink); }
+.pill.status-klaar { background: var(--leaf-deep); color: var(--paper); border-color: var(--leaf-deep); }
+.pill.status-opgehaald { background: var(--paper); color: var(--ink-2); border-color: var(--line-strong); }
+.pill.status-geannuleerd { background: var(--paper); color: var(--ember); border-color: var(--ember); }
+.status-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.photo-up { display: grid; grid-template-columns: 5rem 1fr; gap: 0.75rem; align-items: center; }
+.lc-grid { display: grid; gap: 0.5rem; }
+.small-input { max-width: 8rem; }
+
+/* Breder scherm */
+@media (min-width: 48rem) {
+  #view { max-width: 56rem; }
+  .tabbar { padding-inline: calc((100vw - 56rem) / 2 + 0.5rem); }
+  .topbar, .demo-strip { padding-inline: max(var(--gutter), calc((100vw - 56rem) / 2 + var(--gutter))); }
+  .plist { grid-template-columns: 1fr 1fr; }
+  .hero { min-height: 30rem; border-radius: var(--r-l); margin-inline: 0; }
+  .hero-body { max-width: 34rem; padding-top: 9rem; }
+  .rail { grid-auto-columns: 13rem; margin-inline: 0; padding-inline: 0; }
+  .stats { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 40rem) and (max-width: 47.99rem) { .rail { grid-auto-columns: 12.5rem; } }
+.prod-main { grid-template-columns: 5rem 1fr; }
+.prod-text { gap: 0.2rem; }
+.prod-price { font-size: 1rem; color: var(--ember); }
+.dial { border: 0; box-shadow: var(--shadow); }
+.dial-svg { max-height: 11rem; padding: 0.75rem 1rem 0; }
+#adm { display: grid; gap: 1.25rem; }
+.spread { flex-wrap: wrap; }
+.h3 { font-size: 1.1875rem; letter-spacing: -0.01em; }
+.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.field > label, .field select, .field input { min-width: 0; }
+#adm a[href^="tel:"], #adm a[href^="mailto:"] { display: inline-flex; align-items: center; min-height: 2.75rem; }
+label.btn { position: relative; overflow: hidden; cursor: pointer; }
+label.btn .sr { left: 0; top: 0; }
+label.btn:has(.sr:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }

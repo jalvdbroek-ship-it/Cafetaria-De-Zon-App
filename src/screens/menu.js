@@ -28,7 +28,7 @@ export default {
     const { menu } = app.data;
     return html`
       <h1>Menukaart</h1>
-      <p class="small"><span class="pill voorbeeld">Voorbeeldkaart</span> Producten en prijzen zijn voorbeelden, geen echte kaart van De Zon.</p>
+      ${menu.producten.some((p) => !p.bevestigd) ? html`<p class="small"><span class="pill voorbeeld">Voorbeeldkaart</span> Producten en prijzen zijn voorbeelden, geen echte kaart van De Zon.</p>` : ""}
       <div class="menu-bar">
         <div class="field"><label class="sr" for="q">Zoek in het menu</label><input id="q" type="search" placeholder="Zoek bijvoorbeeld frikandel" autocomplete="off" enterkeyhint="search"></div>
         <div class="chips" id="chips" role="group" aria-label="Categorieën">${menu.categorieen.map((c) => html`<button class="chip" data-cat="${c.id}">${c.naam}</button>`)}</div>

@@ -12,6 +12,23 @@ export function photo(app, id, { cls = "", eager = false } = {}) {
   return html`<figure class="photo ${cls}"><img src="public/img/foto/${id}-800.webp" alt="${info.alt}" width="800" height="450" ${eager ? "" : 'loading="lazy"'} decoding="async" ${eager ? 'fetchpriority="high"' : ""}>${info.voorbeeld ? html`<figcaption>Voorbeeldfoto</figcaption>` : ""}</figure>`;
 }
 
+// Eigen foto van het product (upload) of de categoriefoto als voorbeeld; per product een andere uitsnede zodat de lijst niet eentonig wordt.
+export function productImage(app, p) {
+  const cat = catOf(app.data.menu, p);
+  if (p.foto) return { src: p.foto, own: true, pos: "50% 50%", zoom: 1 };
+  const id = cat?.foto;
+  if (!id || !app.fotos?.[id]) return null;
+  let h = 0;
+  for (const c of p.id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return { src: `public/img/foto/${id}-800.webp`, own: false, pos: `${20 + (h % 61)}% ${20 + ((h >> 5) % 61)}%`, zoom: 1.15 + ((h >> 9) % 5) / 10 };
+}
+const thumb = (app, p, cls) => {
+  const img = productImage(app, p), cat = catOf(app.data.menu, p);
+  return img
+    ? html`<span class="${cls}"><img src="${img.src}" alt="" loading="lazy" decoding="async" width="400" height="400" style="object-position:${img.pos};--zoom:${img.zoom}"></span>`
+    : illustration(cat?.illustratie, `ill tile`);
+};
+
 export function productRow(app, p) {
   const cat = catOf(app.data.menu, p);
   const hasOptions = (p.opties || []).length > 0;
@@ -19,15 +36,28 @@ export function productRow(app, p) {
   return html`
     <li class="prod ${p.uitverkocht ? "is-out" : ""}">
       <button class="prod-main" data-open="${p.id}" aria-label="${p.naam}, ${formatEuro(p.prijs)}${p.uitverkocht ? ", uitverkocht" : ""}. Bekijk details">
-        ${illustration(cat?.illustratie, "ill tile")}
+        ${thumb(app, p, "prod-img")}
         <span class="prod-text">
           <span class="prod-name">${p.naam}</span>
           ${p.omschrijving ? html`<span class="prod-desc">${p.omschrijving}</span>` : ""}
+          <span class="prod-price num">${hasOptions ? "vanaf " : ""}${formatEuro(p.prijs)}</span>
           ${p.uitverkocht ? html`<span class="pill uit">Uitverkocht</span>` : ""}
         </span>
-        <span class="prod-price num">${hasOptions ? "vanaf " : ""}${formatEuro(p.prijs)}</span>
       </button>
       <button class="prod-add" data-add="${p.id}" ${p.uitverkocht ? "disabled" : ""} aria-label="${choose ? `Kies opties voor ${p.naam}` : `Voeg ${p.naam} toe aan je mandje`}">${icon("plus")}</button>
+    </li>`;
+}
+
+export function productCard(app, p) {
+  const choose = needsChoice(app, p), hasOptions = (p.opties || []).length > 0;
+  return html`
+    <li class="pcard ${p.uitverkocht ? "is-out" : ""}">
+      <button class="pcard-main" data-open="${p.id}" aria-label="${p.naam}, ${formatEuro(p.prijs)}${p.uitverkocht ? ", uitverkocht" : ""}. Bekijk details">
+        ${thumb(app, p, "pcard-img")}
+        <span class="pcard-name">${p.naam}</span>
+        <span class="pcard-price num">${hasOptions ? "vanaf " : ""}${formatEuro(p.prijs)}</span>
+      </button>
+      <button class="prod-add round" data-add="${p.id}" ${p.uitverkocht ? "disabled" : ""} aria-label="${choose ? `Kies opties voor ${p.naam}` : `Voeg ${p.naam} toe aan je mandje`}">${icon("plus")}</button>
     </li>`;
 }
 
@@ -63,9 +93,10 @@ export async function openProductSheet(app, id) {
   const fav = (await app.ds.getFavorites()).includes(id);
   let qty = 1;
   const content = html`
+    ${productImage(app, p) ? html`<span class="sheet-img"><img src="${productImage(app, p).src}" alt="" width="800" height="450" style="object-position:${productImage(app, p).pos}"></span>` : ""}
     <div class="spread"><h2>${p.naam}</h2><button class="icon-btn" data-close aria-label="Sluiten">${icon("x")}</button></div>
     ${p.omschrijving ? html`<p class="muted">${p.omschrijving}</p>` : ""}
-    <p class="small"><span class="pill voorbeeld">Voorbeeldprijs</span></p>
+    ${p.bevestigd ? "" : html`<p class="small"><span class="pill voorbeeld">Voorbeeldprijs</span></p>`}
     ${p.uitverkocht ? html`<p><span class="pill uit">Uitverkocht</span> Dit product kun je nu niet bestellen.</p>` : ""}
     <form class="stack" id="prod-form" novalidate>
       ${groups.map((g) => html`

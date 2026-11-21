@@ -1,4 +1,5 @@
 import { BASE, fail, ok, fresh, shot, report } from "./check-setup.mjs";
+import { auditPage } from "./check-lib.mjs";
 
 export async function more() {
   console.log("\n== beheer: prijs en uitverkocht werken door in het menu");
@@ -7,7 +8,7 @@ export async function more() {
     await page.goto(`${BASE}#/beheer`); await page.waitForSelector("#pin");
     await page.fill("#pin-in", "9999"); await page.click("#pin button");
     (await page.textContent("#e-pin")).includes("klopt niet") ? ok("foute pincode geweigerd") : fail("beheer", "foute pincode niet geweigerd");
-    await page.fill("#pin-in", "1234"); await page.click("#pin button"); await page.waitForSelector("#adm");
+    await page.fill("#pin-in", "1234"); await page.click("#pin button"); await page.waitForSelector("#adm"); await page.goto(`${BASE}#/beheer/producten`); await page.waitForSelector(`[data-id="kroket"] summary`);
     await page.click('[data-id="kroket"] summary'); await page.fill('[data-id="kroket"] [name=prijs]', "9,99");
     await page.check('[data-id="kroket"] [name=uitverkocht]'); await page.click('[data-id="kroket"] [data-save]'); await page.waitForTimeout(300);
     await shot(page, "390-beheer");
@@ -16,6 +17,26 @@ export async function more() {
     /9,99.*uitverkocht/.test(label) ? ok("nieuwe prijs en uitverkocht in menu") : fail("beheer", `menu toont ${label}`);
     (await page.isDisabled('[data-add="kroket"]')) ? ok("uitverkocht product niet bestelbaar") : fail("beheer", "uitverkocht product is bestelbaar");
     report(issues, "beheer");
+    await ctx.close();
+  }
+  console.log("\n== Jackpot in de demo: rad, uitslag, een draai, toegankelijkheid");
+  {
+    const { ctx, page, issues } = await fresh(390, 844);
+    await page.goto(`${BASE}#/menu`); await page.waitForSelector(".prod");
+    for (let i = 0; i < 3; i++) await page.click('[data-add="hamburger"]').catch(() => {});
+    await page.goto(`${BASE}#/mandje/afrekenen`); await page.waitForSelector("#co");
+    await page.fill("#naam", "Jan"); await page.fill("#telefoon", "06 12345678"); await page.click("#go"); await page.waitForSelector(".order-id");
+    await page.waitForSelector(".jackpot-cta"); ok("bevestiging biedt Jackpot-draai aan");
+    await page.click(".jackpot-cta"); await page.waitForSelector("#spin");
+    for (const p of await page.evaluate(auditPage)) fail("jackpot", p);
+    await page.click("#spin"); await page.waitForSelector("#prize", { timeout: 9000 });
+    (await page.textContent("#prize")).includes("Demo, niet bindend") ? ok("uitslag is als demo gelabeld") : fail("jackpot", "uitslag zonder demolabel");
+    (await page.textContent("#prize .order-id")).match(/^JKP-/) ? ok("demo-bon JKP-") : fail("jackpot", "geen bon");
+    await page.reload(); await page.waitForSelector("#prize");
+    (await page.locator("#spin").count()) === 0 ? ok("na de draai geen tweede draai") : fail("jackpot", "tweede draai mogelijk");
+    await page.goto(`${BASE}#/account`); await page.waitForSelector("#view h1");
+    (await page.textContent("#view")).includes("JKP-") ? ok("bon staat bij Mijn De Zon") : fail("jackpot", "bon niet bij Mijn De Zon");
+    report(issues, "jackpot demo");
     await ctx.close();
   }
   console.log("\n== offline na eerste load");

@@ -11,7 +11,7 @@ if (time) await page.clock.install({ time: new Date(time) });
 const problems = [];
 page.on("console", (m) => { if (["error", "warning"].includes(m.type())) problems.push(`${m.type()}: ${m.text()}`); });
 page.on("pageerror", (e) => problems.push(`pageerror: ${e.message}`));
-await page.goto(`http://localhost:4200/#/${route}`);
+await page.goto(`${process.env.BASE || "http://localhost:4200/"}#/${route}`);
 await page.waitForSelector("#view h1", { timeout: 5000 });
 await page.waitForTimeout(1400);
 mkdirSync(new URL("../docs/screenshots/tmp/", import.meta.url), { recursive: true });

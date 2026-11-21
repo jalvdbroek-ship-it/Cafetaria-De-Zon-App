@@ -58,3 +58,14 @@ Gemeten met `node tools/check-app.mjs` (Playwright, Chromium) op 390x844, 360x74
 | **Totaal** | **21/24** | Grootste winst: eigen foto's, een screenreader-test op een echt toestel |
 
 Prestaties (lokaal, geen netwerkdemping): LCP Home ongeveer 100 ms, Menu ongeveer 110 ms. Eerste start is ongeveer 70 kB gzip (JS-kern 20, CSS 6, lettertype 40, data 3); overige schermen laden pas bij gebruik. Geen Lighthouse-run (niet geinstalleerd, niets toegevoegd).
+
+## Ontwerp v2 (huidig)
+
+De look is vernieuwd naar **geel, donkerblauw en wit met oranje als accent**; de tokenwaarden hierboven zijn vervangen (zie `public/css/tokens.css`, contrast gecontroleerd met `npm run contrast`).
+`public/css/design.css` is de laag die de oudere regels overschrijft; nieuwe stijlen komen daar.
+
+- **Home**: hero met grote foto, open/dicht-zonnewijzer (zonder figuurtjes), aanbieding van de week, Populair (grote productkaarten), Jackpot-blok, spaarkaart, openingstijden.
+- **Menu**: categorie Menu's eerst; elke productregel heeft een foto. Zonder eigen foto staat er een voorbeeldfoto van de categorie, met een per product andere uitsnede. Een geüploade foto vervangt die.
+- **Jackpot**: rad in SVG met gelijke taartpunten; de kansen staan in een lijst eronder. Bij verminderde beweging springt het rad direct naar de uitslag.
+- **Labels**: "Demo" alleen in de demo-stand. "Voorbeeldkaart", "Voorbeeldprijs" en "Voorbeeldfoto" verdwijnen per product zodra de eigenaar het bevestigt.
+- **Breed scherm**: vanaf 48rem een bredere kolom met een rooster van twee kolommen voor producten.

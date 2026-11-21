@@ -1,15 +1,64 @@
 {
-  "_uitleg": "Instellingen van de app. Alles onder loyalty is een VOORBEELD, geen regeling van De Zon. demoPin is geen echte beveiliging: het beheerpaneel is een demo.",
+  "_uitleg": "Instellingen van de app. Alles onder loyalty en jackpot is een VOORBEELD, geen regeling van De Zon. demoPin is alleen voor de demo en geen echte beveiliging: de echte server gebruikt DEZON_ADMIN_PASSWORD.",
   "demo": true,
   "demoPin": "1234",
-  "pickup": { "intervalMin": 15, "leadMin": 15, "lastBeforeCloseMin": 15 },
+  "pickup": {
+    "intervalMin": 15,
+    "leadMin": 15,
+    "lastBeforeCloseMin": 15
+  },
   "loyalty": {
     "voorbeeld": true,
     "pointsPerEuro": 1,
     "rewards": [
-      { "id": "saus", "naam": "Gratis saus", "punten": 50 },
-      { "id": "frites-klein", "naam": "Gratis frites klein", "punten": 100 },
-      { "id": "hamburger", "naam": "Gratis hamburger", "punten": 200 }
+      {
+        "id": "saus",
+        "naam": "Gratis saus",
+        "punten": 50
+      },
+      {
+        "id": "frites-klein",
+        "naam": "Gratis frites klein",
+        "punten": 100
+      },
+      {
+        "id": "hamburger",
+        "naam": "Gratis hamburger",
+        "punten": 200
+      }
+    ]
+  },
+  "jackpot": {
+    "voorbeeld": true,
+    "enabled": true,
+    "minTotal": 1000,
+    "geldigDagen": 30,
+    "prizes": [
+      {
+        "id": "saus",
+        "naam": "Gratis saus",
+        "weight": 50
+      },
+      {
+        "id": "frites-klein",
+        "naam": "Gratis frites klein",
+        "weight": 25
+      },
+      {
+        "id": "softijs",
+        "naam": "Gratis softijs",
+        "weight": 14
+      },
+      {
+        "id": "hamburger",
+        "naam": "Gratis hamburger",
+        "weight": 8
+      },
+      {
+        "id": "menu",
+        "naam": "Gratis menu naar keuze",
+        "weight": 3
+      }
     ]
   }
 }

@@ -21,7 +21,7 @@ export default {
     return html`
       <a class="link back" href="#/mandje">${icon("back")} Mandje</a>
       <h1>Afrekenen</h1>
-      ${demoBanner("Je plaatst een demo-bestelling. Die wordt alleen op dit toestel bewaard en niet naar De Zon gestuurd. Betalen kan nog niet.")}
+      ${app.demo ? demoBanner("Je plaatst een demo-bestelling. Die wordt alleen op dit toestel bewaard en niet naar De Zon gestuurd. Betalen kan nog niet.") : ""}
       <form id="co" class="stack-lg" novalidate>
         <div class="field"><label for="naam">Naam</label><input id="naam" name="naam" type="text" autocomplete="name" maxlength="60" value="${acc.naam}"><p class="field-error" id="e-naam" role="alert"></p></div>
         <div class="field"><label for="telefoon">Telefoonnummer</label><input id="telefoon" name="telefoon" type="tel" inputmode="tel" autocomplete="tel" value="${acc.telefoon}"><p class="hint">Zodat De Zon je kan bellen als er iets is.</p><p class="field-error" id="e-telefoon" role="alert"></p></div>
@@ -40,10 +40,10 @@ export default {
         <section class="card soft stack" aria-label="Overzicht">
           <ul class="olines">${priced.lines.map((l) => html`<li><span class="num">${l.qty}×</span><span class="grow">${l.product.naam}${l.optionNames.length ? html`<span class="muted small block">${l.optionNames.join(", ")}</span>` : ""}</span><span class="num">${formatEuro(l.total)}</span></li>`)}
           <li class="total"><span class="grow">Totaal</span><span class="num">${formatEuro(priced.subtotal)}</span></li></ul>
-          <p class="small muted">Betalen in de app kan nog niet (koppeling nodig). Voorbeeldprijzen.</p>
+          <p class="small muted">${app.demo ? "Betalen in de app kan nog niet (koppeling nodig). Voorbeeldprijzen." : "Je betaalt bij het afhalen, contant of met pin. Betalen in de app kan nog niet."}</p>
         </section>
         <p class="field-error" id="e-form" role="alert"></p>
-        <button class="btn block big" type="submit" id="go" ${slots.slots.length ? "" : "disabled"}>Demo-bestelling opslaan · ${formatEuro(priced.subtotal)}</button>
+        <button class="btn block big" type="submit" id="go" ${slots.slots.length ? "" : "disabled"}>${app.demo ? "Demo-bestelling opslaan" : "Bestelling plaatsen"} · ${formatEuro(priced.subtotal)}</button>
       </form>`;
   },
   mount(root, app) {

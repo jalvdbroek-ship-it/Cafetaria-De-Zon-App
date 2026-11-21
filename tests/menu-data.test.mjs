@@ -7,7 +7,7 @@ const menu = JSON.parse(readFileSync(new URL("../src/data/menu.json", import.met
 
 test("het meegeleverde voorbeeldmenu is geldig en volledig als voorbeeld gemarkeerd", () => {
   assert.equal(menuProblem(menu), null);
-  assert.equal(menu.producten.length, 32);
+  assert.equal(menu.producten.length, 35);
   assert.ok(menu.producten.every((p) => p.bevestigd === false));
 });
 test("prijzen zijn hele centen en komen overeen met het website-voorbeeldmenu", () => {

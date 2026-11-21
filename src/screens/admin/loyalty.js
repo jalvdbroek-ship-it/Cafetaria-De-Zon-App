@@ -10,7 +10,7 @@ export default {
         <p class="small muted">Alles hier is een voorbeeldregeling tot De Zon er zelf een kiest.</p>
         <div class="field"><label for="ppe">Punten per bestede euro</label><input id="ppe" name="ppe" type="number" min="0" max="10" step="1" inputmode="numeric" value="${l.pointsPerEuro}"></div>
         <label class="check"><input type="checkbox" name="voorbeeld" ${l.voorbeeld ? "checked" : ""}><span class="grow">Toon als voorbeeldregels</span></label>
-        <h3>Beloningen</h3>
+        <h2 class="h3">Beloningen</h2>
         <div id="rewards" class="stack">${l.rewards.map((r) => html`
           <div class="reward-edit" data-id="${r.id}"><input aria-label="Naam beloning" name="rnaam" type="text" maxlength="40" value="${r.naam}"><input aria-label="Aantal punten" name="rpunten" type="number" min="1" max="5000" inputmode="numeric" value="${r.punten}"><button type="button" class="icon-btn" data-rdel aria-label="Verwijder ${r.naam}">×</button></div>`)}</div>
         <button type="button" class="btn secondary sm" id="radd">Beloning toevoegen</button>

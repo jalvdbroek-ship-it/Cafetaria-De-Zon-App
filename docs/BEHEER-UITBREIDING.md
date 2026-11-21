@@ -1,29 +1,19 @@
-# Beheer: van demo naar echt
+# Beheer
 
-## Wat het demo-beheer nu is
+## Wat er nu is
 
-`#/beheer` in de app, achter een pincode uit `config/app.json`. Producten (naam, prijs, uitverkocht, uitgelicht,
-bevestigd), acties, spaarregels, openingstijden en afhaalinstellingen, bestellingen van dit toestel, export en import
-als JSON. Alles staat in `localStorage` van **dat ene toestel**. De pincode is zichtbaar voor iedereen die de bestanden
-kan lezen: het is een demo van de schermen, geen beveiliging.
+`#/beheer` in de app, in twee standen:
 
-## Wat een echt beheer nodig heeft
+- **Echt (server)**: inloggen met `DEZON_ADMIN_PASSWORD`. Overzicht, bestellingen met status, producten (prijs, categorie, uitverkocht, foto-upload), categorieën, klanten, spaarregels,
+  Jackpot en bonnen, acties en openingstijden. Alles staat op de server en geldt voor alle klanten.
+- **Demo**: pincode uit `config/app.json` (zichtbaar voor iedereen die de bestanden leest: geen beveiliging). Wijzigingen blijven op het toestel; export en import als JSON.
+
+## Wat nog ontbreekt voor een volwassen beheer
 
 | Onderdeel | Eis |
 | --- | --- |
-| Inloggen | Aparte beheerrol, wachtwoord met MFA, sessie op de server, uitloggen op alle toestellen |
-| Opslag | Database op een server; wijzigingen zichtbaar voor alle klanten; versiegeschiedenis ("wie wijzigde de prijs") |
-| Rechten | Minimaal eigenaar (alles) en medewerker (uitverkocht zetten, bestellingen bekijken) |
-| Bestellingen | Binnenkomende bestellingen live (geluid of melding), status bijwerken, afdrukken voor de keuken, annuleren met reden |
-| Menu | Foto's uploaden (met afmetingen en compressie), prijs en btw, allergenen, planning (vanaf/tot) |
-| Acties | Plannen, tonen op Home, koppelen aan spaarregel |
-| Spaarregels | Wijzigen met ingangsdatum; bestaande punten blijven geldig |
-| Controle | Audit-log, back-up en herstel, rate limiting op inloggen |
-
-## Aanbevolen volgorde
-
-1. Kies een bestelplatform of bouw een kleine server (`API-CONTRACT.md`).
-2. Zet bestellingen van de app eerst op alleen e-mail of print bij De Zon (laagste risico), dan pas betalen.
-3. Bouw het beheer als aparte route met eigen inlog; hergebruik de bestaande schermen in `src/screens/admin/`
-   door `LocalDemoSource` te vervangen door `HttpSource`.
-4. Verwijder de pincode en `config/app.json` uit de client zodra de server de controle doet.
+| Inloggen | MFA, meerdere gebruikers en rollen (eigenaar en medewerker), uitloggen op alle toestellen |
+| Bestellingen | Geluid of melding bij een nieuwe bestelling, printen voor de keuken, annuleren met reden |
+| Menu | Btw, allergenen, planning (vanaf/tot), foto's automatisch verkleinen en oude uploads opruimen |
+| Controle | Audit-log ("wie wijzigde de prijs"), versiegeschiedenis |
+| Back-up | Nu handmatig (map `data/`), zie `HOSTEN.md` |
